@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+
+<title>Thoughts by a non-economist on AI and economics &#8211; Windows On Theory</title>
+<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=8839'
+					+ '&is_singular=1';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly93aW5kb3dzb250aGVvcnkub3Jn"
+		+ "&wpcomid=32349634"
+		+ "&time=1762406335";
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//widgets.wp.com' />
+<link rel='dns-prefetch' href='//fonts-api.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="Windows On Theory &raquo; Feed" href="https://windowsontheory.org/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Windows On Theory &raquo; Comments Feed" href="https://windowsontheory.org/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Windows On Theory &raquo; Thoughts by a non-economist on AI and&nbsp;economics Comments Feed" href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<script type="text/javascript">
+/* <![CDATA[ */
+window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"\/wp-includes\/js\/wp-emoji-release.min.js?m=1751981882i&ver=6.9-alpha-60715"}};
+/*! This file is auto-generated */
+!function(s,n){var o,i,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),a=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===a[t]})}function u(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);for(var n=e.getImageData(16,16,1,1),a=0;a<n.data.length;a++)if(0!==n.data[a])return!1;return!0}function f(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\udedf")}return!1}function g(e,t,n,a){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):s.createElement("canvas"),o=r.getContext("2d",{willReadFrequently:!0}),i=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(function(e){i[e]=t(o,e,n,a)}),i}function t(e){var t=s.createElement("script");t.src=e,t.defer=!0,s.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",i=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){s.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+g.toString()+"("+[JSON.stringify(i),f.toString(),p.toString(),u.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"}),r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=function(e){c(n=e.data),r.terminate(),t(n)})}catch(e){}c(n=g(i,f,p,u))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+/* ]]> */
+</script>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJxtzEkKgDAQRNELGZs4EDfiWUJsxMzYHby+RARB3BQ8KD6cWZgUGSNDKCL7su2RwCJnbdxjCCnVWYtHggO9ZlxFTsQftYaogf+k3x2+4Vv1voRZqrHvpkHJwV5glDTa&cssminify=yes' type='text/css' media='all' />
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-2-1' href='/wp-content/plugins/gutenberg-core/v20.6.0/build/block-library/style.css?m=1744959081i&cssminify=yes' type='text/css' media='all' />
+<style id='wp-block-library-inline-css'>
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+</style>
+<style id='classic-theme-styles-inline-css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-4-1' href='/_static/??-eJyVzDEOgCAMQNELiQU1Jg7Gs2AlDYpAaInx9ro5O/7hfbiywhTFRYEcKvnIQPXN1RVSa0h4MOxOssVDBXunKoqK34DlDq5F5gb+LIoVH4k/vpyzGYe+03oyw/4AcmU1KQ==&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-6-1' href='/_static/??-eJzTLy/QzcxLzilNSS3WzyrWz01NyUxMzUnNTc0rQeEU5CRWphbp5qSmJyZX6uVm5uklFxfr6OPTDpRD5sM02efaGpoZmFkYGRuZGmQBAHPvL0Y=&cssminify=yes' type='text/css' media='all' />
+<style id='jetpack-sharing-buttons-style-inline-css'>
+.jetpack-sharing-buttons__services-list{display:flex;flex-direction:row;flex-wrap:wrap;gap:0;list-style-type:none;margin:5px;padding:0}.jetpack-sharing-buttons__services-list.has-small-icon-size{font-size:12px}.jetpack-sharing-buttons__services-list.has-normal-icon-size{font-size:16px}.jetpack-sharing-buttons__services-list.has-large-icon-size{font-size:24px}.jetpack-sharing-buttons__services-list.has-huge-icon-size{font-size:36px}@media print{.jetpack-sharing-buttons__services-list{display:none!important}}.editor-styles-wrapper .wp-block-jetpack-sharing-buttons{gap:0;padding-inline-start:0}ul.jetpack-sharing-buttons__services-list.has-background{padding:1.25em 2.375em}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jEEOAiEQBD/kQECjeDC+ZWEnijIwYWA3/l72op689KFTVXplCCU3zE1z6reYRYfiUwlP0VYZpwxIJE4IFRd10HOU9iFA2iuhCiI7/ROiDt9WxfETT20jCOc4YUIa2D9t5eGA91xRBMZS7ATtPkTZvCtdzNEZt7f2fHq8Afl7R7w=&cssminify=yes' type='text/css' media='all' />
+<style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #fff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--dark-green: #1c7c7c;--wp--preset--color--dark-gray: #666;--wp--preset--color--medium-gray: #999;--wp--preset--color--light-gray: #eee;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/moon/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.css?m=1760027108i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='verbum-gutenberg-css-css' href='https://widgets.wp.com/verbum-block-editor/block-editor.css?ver=1738686361' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/_static/??/wp-content/themes/pub/penscratch-2/css/reset.css,/wp-content/themes/pub/penscratch-2/style.css?m=1741693338j&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='penscratch-2-fonts-css' href='https://fonts-api.wp.com/css?family=Roboto+Slab%3A300%2C400%2C700&#038;subset=latin%2Clatin-ext' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-14-1' href='/_static/??-eJyNjkEOwjAMBD+Ecamq3BBvSS2TBhInil1V/T2BC0JIiNvOYXYXtwpUxFgMbeHMinWdsbIoNW+0wIikinMqdNdjjwf8Q4lCqLYnhq1SyV9eXqGmNURRbNy7Q4/hNfTGX1LgAv2Rt1jkA+CafGxP9ZLPJ+eGYXRumm4PhIlVaQ==&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='print-css-15-1' href='/wp-content/mu-plugins/global-print/global-print.css?m=1465851035i&cssminify=yes' type='text/css' media='print' />
+<style id='jetpack-global-styles-frontend-style-inline-css'>
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-18-1' href='/_static/??-eJyNjcEKwjAQRH/IuFRT6kX8FNkmS5K6yQY3Qfx7bfEiXrwM82B4A49qnJRGpUHupnIPqSgs1Cq624chi6zhO5OCRryTR++fW00l7J3qDv43XVNxoOISsmEJol/wY2uR8vs3WggsM/I6uOTzMI3Hw8lOg11eUT1JKA==&cssminify=yes' type='text/css' media='all' />
+<script type="text/javascript" id="jetpack_related-posts-js-extra">
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="jetpack-mu-wpcom-settings-js-before">
+/* <![CDATA[ */
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/jetpack-mu-wpcom-plugin\/moon\/jetpack_vendor\/automattic\/jetpack-mu-wpcom\/src\/build\/"};
+/* ]]> */
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/jetpack-plugin/moon/_inc/build/related-posts/related-posts.min.js,/wp-content/js/rlt-proxy.js?m=1755006225j'></script>
+<script type="text/javascript" id="rlt-proxy-js-after">
+/* <![CDATA[ */
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+/* ]]> */
+</script>
+<script type="text/javascript" src="/wp-content/plugins/gutenberg-core/v20.6.0/build/hooks/index.min.js?m=1744959081i&amp;ver=84e753e2b66eb7028d38" id="wp-hooks-js"></script>
+<script type="text/javascript" src="/wp-content/plugins/gutenberg-core/v20.6.0/build/i18n/index.min.js?m=1744959081i&amp;ver=bd5a2533e717a1043151" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+/* ]]> */
+</script>
+<script type="text/javascript" id="wpcom-actionbar-placeholder-js-extra">
+/* <![CDATA[ */
+var actionbardata = {"siteID":"32349634","postID":"8839","siteURL":"https:\/\/windowsontheory.org","xhrURL":"https:\/\/windowsontheory.org\/wp-admin\/admin-ajax.php","nonce":"b9dacfb07f","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https:\/\/s0.wp.com\/wp-content\/js\/wpcom-proxy-request.js?ver=20211021","shortlink":"https:\/\/wp.me\/p2bJCi-2iz","i18n":{"followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/reader\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+/* ]]> */
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://windowsontheory.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" />
+<link rel='shortlink' href='https://wp.me/p2bJCi-2iz' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fwindowsontheory.org%2F2025%2F11%2F04%2Fthoughts-by-a-non-economist-on-ai-and-economics%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fwindowsontheory.org%2F2025%2F11%2F04%2Fthoughts-by-a-non-economist-on-ai-and-economics%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Thoughts by a non-economist on AI and economics" />
+<meta property="og:url" content="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" />
+<meta property="og:description" content="Crossposted on lesswrong Modern humans first emerged about 100,000 years ago. For the next 99,800 years or so, nothing happened. Well, not quite nothing. There were wars, political intrigue, the in…" />
+<meta property="article:published_time" content="2025-11-04T17:02:48+00:00" />
+<meta property="article:modified_time" content="2025-11-04T17:17:55+00:00" />
+<meta property="og:site_name" content="Windows On Theory" />
+<meta property="og:image" content="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png" />
+<meta property="og:image:width" content="1600" />
+<meta property="og:image:height" content="676" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+<meta name="twitter:text:title" content="Thoughts by a non-economist on AI and&nbsp;economics" />
+<meta name="twitter:image" content="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=640" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://s0.wp.com/i/favicon.ico?m=1713425267i" sizes="16x16 24x24 32x32 48x48" />
+<link rel="icon" type="image/x-icon" href="https://s0.wp.com/i/favicon.ico?m=1713425267i" sizes="16x16 24x24 32x32 48x48" />
+<link rel="apple-touch-icon" href="https://s0.wp.com/i/webclip.png?m=1713868326i" />
+<link rel='openid.server' href='https://windowsontheory.org/?openidserver=1' />
+<link rel='openid.delegate' href='https://windowsontheory.org/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://windowsontheory.org/osd.xml" title="Windows On Theory" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<link rel="pingback" href="https://windowsontheory.org/xmlrpc.php"><style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>		<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="description" content="Crossposted on lesswrong Modern humans first emerged about 100,000 years ago. For the next 99,800 years or so, nothing happened. Well, not quite nothing. There were wars, political intrigue, the invention of agriculture -- but none of that stuff had much effect on the quality of people&#039;s lives. Almost everyone lived on the modern equivalent&hellip;" />
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-8839 single-format-standard wp-embed-responsive wp-theme-pubpenscratch-2 customizer-styles-applied group-blog jetpack-reblog-enabled">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+							<p class="site-title"><a href="https://windowsontheory.org/" rel="home">Windows On Theory</a></p>
+							<p class="site-description">A Research Blog</p>
+					</div>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="0" fill="none" width="16" height="16"/><g><path id="menu-icon" d="M0 14h16v-2H0v2zM0 2v2h16V2H0zm0 7h16V7H0v2z"/></g></svg>
+				Menu			</button>
+			<div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-3305" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-3305"><a href="https://windowsontheory.org/">Home</a></li>
+<li id="menu-item-3306" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3306"><a href="https://windowsontheory.org/about/">About</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+		
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-8839" class="post-8839 post type-post status-publish format-standard hentry category-uncategorized">
+	<header class="entry-header">
+		<h1 class="entry-title">Thoughts by a non-economist on AI and&nbsp;economics</h1>		
+		<div class="entry-meta">
+			<span class="posted-on"><a href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" rel="bookmark"><time class="entry-date published" datetime="2025-11-04T12:02:48-05:00">November 4, 2025</time><time class="updated" datetime="2025-11-04T12:17:55-05:00">November 4, 2025</time></a></span><span class="byline"><span class="author vcard"><span class="sep"> ~ </span><a class="url fn n" href="https://windowsontheory.org/author/windowsontheory/">Boaz Barak</a></span></span>					</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		
+<p><em>Crossposted on <a href="https://www.lesswrong.com/posts/QQAWu7D6TceHwqhjm/thoughts-by-a-non-economist-on-ai-and-economics">lesswrong</a></em></p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p><em>Modern humans first emerged about 100,000 years ago. For the next 99,800 years or so, nothing happened. Well, not quite nothing. There were wars, political intrigue, the invention of agriculture &#8212; but none of that stuff had much effect on the quality of people&#8217;s lives. Almost everyone lived on the modern equivalent of $400 to $600 a year, just above the subsistence level …&nbsp;  Then &#8212; just a couple of hundred years ago, maybe 10 generations &#8212; people started getting richer. And richer and richer still. Per capita income, at least in the West, began to grow at the unprecedented rate of about three quarters of a percent per year. A couple of decades later, the same thing was happening around the world.”</em>&nbsp; <a href="https://www.wsj.com/articles/SB118134633403829656">Steven Lundsburg</a></p>
+</blockquote>
+
+
+
+<p>METR has had a very influential work by Kwa and West et al on <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/">measuring AI’s ability to complete long tasks</a>. Its main result is the following remarkable graph:</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png"><img data-attachment-id="8842" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-22/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png" data-orig-size="1600,676" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=656" width="1024" height="432" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=1024" alt="" class="wp-image-8842" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png?w=1440 1440w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-1.png 1600w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>On the X axis is the release date of flagship LLMs. On the Y axis is the following measure of their capabilities: take software-engineering tasks that these models can succeed in solving 50% of the time, and measure the time it takes <em>humans</em> to solve them.</p>
+
+
+
+<p>While it is not surprising that models improve over time, the main reason this graph is remarkable is because the Y axis is on a log scale. This means that there is a fixed period of time after which models have <em>doubled</em> the length of tasks they can complete successfully. Specifically METR estimates this “doubling time” (which is proportional to the inverse of the slope of the line in this graph) at about 7 months, although they note that it may have accelerated recently (to as little as 3 months if considering only models after 2024). In this blog, just to make things simple, I will assume doubling time is 6 months, so the length of time horizon quadruples every year. (All numbers here are very rough.)</p>
+
+
+
+<p>There are many factors that could potentially impact these results (and METR did a pretty admirable job of enumerating them). It is worth separating them into factors that impact the <strong>intercept</strong> (the actual length of time horizon of tasks that models can do) and factors that impact the <strong>slope</strong> (the doubling time) or possibly even the <strong>shape</strong> (e.g. breaking the linear relation between model release time and log horizon).</p>
+
+
+
+<p></p>
+
+
+
+<h3 class="wp-block-heading">Factors impacting the intercept</h3>
+
+
+
+<p>The precise values — e.g., GPT5 doing tasks that take humans 2 hours and 17 minutes — could be impacted by numerous factors:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Reliability factor (↓)</strong> &#8211; the graph is plotted at 50% reliability. For 80% reliability METR got a similar slope (that is about the same doubling time)&nbsp; but the intercept is much lower, e.g. GPT5 can only perform tasks that take 26 minutes. (See also note on 100% accuracy below.)<br></li>
+
+
+
+<li><strong>Task type (↕)</strong>&#8211; the graph is plotted for a specific benchmark. METR also studied <a href="https://metr.org/blog/2025-07-14-how-does-time-horizon-vary-across-domains/">other domains</a>. The data is more sparse but broadly concurs with the straight line fit (sometimes an even steeper line, though some of these datapoints are only available for more recent models where the slope is steeper).<br></li>
+
+
+
+<li><strong>“Benchmark bias”</strong> <strong>(↓)</strong>&#8211; AI models tend to do much better in tasks that are well scoped and easy to measure success in, while real world tasks are much “messier” &#8211; in their specification, the context needed to solve them, and the way we measure success. It is still an open question if this impacts only the intercept, also the slope, or even the shape of the curve. “Field experiments” are still very limited and with mixed results. However, the rapid rise in actual usage of AI is an indication that models’ capabilities are not just limited to lab setting.Personally I am sure that this has a significant impact on the “intercept” —&nbsp; models pay a significant “messiness tax” in translating their performance from benchmarks to the real world — but I am not convinced it impacts the slope. That is, the “messiness tax” may well be a fixed constant c&lt;1 multiplier on the duration of tasks that models can handle.</li>
+</ul>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading">Factors impacting the slope/shape</h2>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Exponential inputs (↓):</strong> The X axis of time for model release combines a number of inputs to models that have been growing at a rapid rate. These include compute, staff at AI labs, data, capital investment in AI, and more. For example <a href="https://epoch.ai/data/ai-models">Epoch AI estimates</a> that the training compute for models has been doubling every 6 months. If the base of this exponent changes in one way or the other, this will likely impact the rate of progress. In particular, tautologically, sustaining exponential growth in inputs becomes exponentially more challenging over time–and quickly becomes impossible. That said, so far investment in these resources is showing no signs of slowing down.<br></li>
+
+
+
+<li><strong>New data / active learning (↓):</strong> So far by and large LLMs have been training on data produced by humans. One comparison can be to a human student, who throughout K-12 and undergraduate studies mostly learns from textbooks &#8211; knowledge that has already been collected. However, in many professions, and in particular in science and inventions, humans need to discover new knowledge and collect new observations from the real world. If LLMs require inputs such as running scientific experiments or acting in the world to improve their intelligence, that would slow progress down. That said, so far we have not seen any such slowdown even as LLMs are becoming more “agentic”. Indeed, the METR data is only showing a speedup in the slope in recent years.<br></li>
+
+
+
+<li><strong>Physical tasks and data (↓): </strong>METR primarily focused on software engineering. It is possible these trends will extend to other kinds of cognitive labor. But we do not know if they extend to domains where people need to either act in the physical world, or collect data from the physical world. While robotics has been <a href="https://www.physicalintelligence.company/blog/pi05">advancing</a> as well, it is unclear whether or not it follows a similar exponential curve. Even if state of the art robotics improve at a similar rate to state of art models, manufacturing robots at scale can remain a bottleneck.<br><br>I personally do not believe in a “data wall.” I believe that there are diminishing returns to more data of the same type, and the advances over the last few years, as captured by the METR graph, have largely not been due to a larger quantity of data from the Internet. Also, while so far much of AI’s economic impact has been in software engineering, it is telling that the best models for software engineering are ones that are trained on very general data, and are often good at <a href="https://www.lennysnewsletter.com/p/everyone-should-be-using-claude-code">many other tasks</a> (while this article is about Claude code,I can’t help but note that in my experience <a href="https://chatgpt.com/features/codex">codex</a> too is great for non-coding tasks 🙂 ). In my view, thinking that AI’s impact would be restricted to software engineering is analogous to thinking in January 2020 that Covid’s impact would be restricted to China.<strong><br></strong></li>
+
+
+
+<li><strong>Threshold effects (↑):</strong> These tasks are measured with respect to humans that have certain time scales in which they operate on. Us humans need to sleep, take breaks, and split work between workers, which requires isolating the context needed for completing a task and the way to measure its success. Hence we break tasks into ones that can be achieved in a working day, week, month, quarter. (I believe that even Andrew Wiles, who worked on Fermat’s last theorem for 7 years, broke it down to multiple intermediate results.) Thus it is possible that once AI reaches a certain time horizon, either (a) the measurement no longer makes sense, or (b) it can essentially simulate any combination of humans working for an arbitrarily large amount of time.<br></li>
+
+
+
+<li><strong>Recursive self improvement (↑):</strong> An important input to the process of producing AI models has been the work of human researchers and engineers. If AI itself can produce that input, then it could correspond to a massive increase in this input. It is still unknown whether using AI for automating the AI creation process will lead to a singularity, increase in slope, one-time boost, or just help sustain the exponential.</li>
+</ul>
+
+
+
+<p>The bottom line is that we have significant uncertainty about the intercept, but arguably less about the slope, or at least the general shape of it up to the point of recursive self improvement / full automation of all human cognitive labor. So from now on I will just assume that time horizons will be doubling every 6 months and make no assumptions about the actual values of the time horizons themselves.</p>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading">Sigmoidal relationship</h2>
+
+
+
+<p>Another remarkable figure in the METR <a href="https://arxiv.org/abs/2503.14499">paper</a> is the following (Figure 5 there):</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png"><img data-attachment-id="8847" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-27/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png" data-orig-size="1314,1170" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=656" width="1024" height="911" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=1024" alt="" class="wp-image-8847" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2.png 1314w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>What I find striking about it is how good is the “sigmoid fit” for the performance of models as a function of the time duration it takes a person to do the task. In particular it seems that there is a certain threshold of time duration such that below it, models essentially are successful 100% of the time. This suggests that even the “100% horizon” (as hard as it is to measure empirically) will also double at a similar rate.</p>
+
+
+
+<p>One way to think about this relation is that each task has a notion of “difficulty” (captured by log horizon length) and models have a certain “skill” level that corresponds to how likely they are to succeed. In this sense, this is similar to the <a href="https://en.wikipedia.org/wiki/Elo_rating_system">ELO scale</a> &#8211; we can think of the log horizon as the “ELO rating” of the task, and a model will “win” against the task with 50% chance if it has the same ELO rating. (Thanks to <a href="https://www.lesswrong.com/posts/iEkksmar6mtuQtdsR/jacob_hilton-s-shortform#FwkZAekBjZEvgzkBP">Jacob Hilton</a> for this analogy.) For what it&#8217;s worth, here is the chess ELO rating of models over time (as well as of humans), which displays a similar linear growth over time (though with a long plateau from around 1997-2007).</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png"><img data-attachment-id="8843" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-23/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png" data-orig-size="1379,825" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=656" width="1024" height="612" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=1024" alt="" class="wp-image-8843" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-2.png 1379w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<h2 class="wp-block-heading">Decreasing costs</h2>
+
+
+
+<p>Another striking statistic has been the <a href="https://epoch.ai/data-insights/llm-inference-price-trends">rapid reduction</a> in prices for inference. That is, while it is often costly to extend the frontier of intelligence, once we achieve a certain level X, the cost to provide the same level has been decaying by factor 10x or more per year. It seems that once we reach a certain frontier the first time, it is much cheaper and easier to reach it for the second time (see also the “deepseek moment”). If this trend continues, it might mean that once a job is automated, within a year the cost for AI to do it will become insignificant.&nbsp;</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png"><img data-attachment-id="8844" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-24/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png" data-orig-size="1538,946" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=656" loading="lazy" width="1024" height="629" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=1024" alt="" class="wp-image-8844" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png?w=1440 1440w, https://windowsontheory.org/wp-content/uploads/2025/11/image-1-3.png 1538w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>Discussions on AI often assume that robotics would be an exception, where we would not see as much progress. There are reasons to assume that due to costs of production, and the inability to deploy robots as flexibly as we can virtual AI assistants, costs for robotics would not be decreasing at the same rate. It is less clear to me that there is a fundamental reason that the “doubling time” &#8211; growth in complexity of tasks that robots can perform &#8211; would grow much slower than for other AI systems, but as far as I know there is no data on this point.</p>
+
+
+
+<h2 class="wp-block-heading">Implications for GDP growth</h2>
+
+
+
+<p>This is where I am getting to be pretty out of my depth, but I do want to see if there are ways to make back of the envelope calculations. Because I am focused on “slope” vs “intercept”, I will not try to predict so much <em>when</em> AI will lead to a certain growth but rather how fast we would get from the point of significant growth to explosive growth. For example, how many years would it take from the point that AI contributes to a 5% total growth in GDP to the point when due to AI GDP has doubled.</p>
+
+
+
+<p>I am focusing in this post only on growth, and not considering employment outcomes. It is possible to construct some “knife edge” scenarios under which human displacement perfectly balances out productivity contributions of AI, leading to decreased employment without increase in growth. But I don’t believe such scenarios can be sustained under our assumptions of exponential growth in capability and decrease in costs. Hence, assuming above trends continue, significant labor impacts of AI will have to be coupled with significant productivity gains.</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png"><img data-attachment-id="8845" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-25/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png" data-orig-size="1600,1139" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=656" loading="lazy" width="1024" height="728" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=1024" alt="" class="wp-image-8845" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png?w=1440 1440w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-1.png 1600w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>A remarkable fact is that (adjusted for inflation)&nbsp; U.S. GDP per capita has been growing at essentially a constant rate of roughly 2% over the past 150 years. None of the inventions in this period— including electrification, internal combustion engine, computers and the Internet— changed this trajectory. Note that 2% growth corresponds to a GDP “doubling rate” of 35 years.&nbsp;</p>
+
+
+
+<p>Other countries have seen more significant fluctuations in growth (e.g. see Japan) though it seems that it is easier to grow at a rapid rate when you are far from the frontier, but once you reach it you slow down. This makes sense from the point of view that advancing the frontier requires inventing new ideas, while advancing to the frontier only requires copying and adapting existing ideas.</p>
+
+
+
+<p>Still it is interesting that GDP growth has been only 2% (or maybe around 3% if we don’t consider per capita) even though Moore’s law corresponds to a growth rate of about 40% per year. One explanation is “Baumol’s cost disease” &#8211; while computers have been getting far more productive, people have been the bottleneck (see also section II.C <a href="https://www.kellogg.northwestern.edu/faculty/jones-ben/htm/A%20Framework%20for%20Economic%20Growth%20with%20Capital-Embodied%20Technical%20Change.pdf">here</a>) . Another <a href="https://web.stanford.edu/~chadj/IdeaPF.pdf">explanation</a> is that good ideas are getting harder to find, and hence it requires an increasingly large technological input to get additional output.</p>
+
+
+
+<p>The trillion dollar question is whether AI will break the 2% trend or not. Will AI be just another technology that allows us to sustain 2% growth for another couple of decades? Or will the “AI moment”&nbsp; be for us like post-WWII Japan? That is, should we model it as if we are meeting a new “AI frontier economy” which is vastly more productive, and this interaction will enable rapid growth, with GDP at least doubling every decade as was the case for Japan.&nbsp;</p>
+
+
+
+<p>To put things in perspective, <a href="https://shapingwork.mit.edu/wp-content/uploads/2024/05/Acemoglu_Macroeconomics-of-AI_May-2024.pdf">Acemuglu</a> predicts AI driven GDP growth to be about 0.1% per year while <a href="https://www.goldmansachs.com/insights/articles/generative-ai-could-raise-global-gdp-by-7-percent">Goldman Sachs</a> predicts about 1.5% over a year. GDP doubling over a decade would correspond to roughly 7% growth per year, or AI contributing around 5% additional growth &#8211; more than triple the Goldman Sachs estimate, and 50 times higher than Acemuglu’s estimates. The consequences of even a “minor” boost in growth can be massive. A 1.2% increase in GDP growth would be sufficient to put the U.S. economy on fiscally sustainable footing, with no need for increased taxes or decreased spending, while a 2% increase in GDP growth would be unprecedented for the U.S.&nbsp;</p>
+
+
+
+<p>AI can contribute to GDP growth by either enabling replacement of labor with capital, or increasing total factor productivity. Specifically, some versions of <a href="https://web.stanford.edu/~chadj/JonesHandbook2005.pdf">endogenous growth theory</a> stipulate that productivity grows with the production of ideas, and this production is in turn monotonically (though <a href="https://web.stanford.edu/~chadj/IdeaPF.pdf">not linearly</a>) related to the number of researchers/inventors.&nbsp;</p>
+
+
+
+<p>If AI contributes via automating a specific industry, then the maximum benefit to the GDP is bounded by the share of this industry. Specifically, if an industry amounts for x fraction of the economy then (according to the model of B. Jones, see below)&nbsp; automating it fully can boost GDP by at most 1/(1-x). E.g., full automation of the software industry can increase the GDP by 1/0.98~ 2%. Depending on how you measure it,<a href="https://shs.cairn.info/revue-travail-et-emploi-2019-1-page-45?lang=en"> cognitive labor</a> arguably amounts to at least 30% of GDP (e.g. half of labor share of GDP) and so full automation of it could increase it by 1/0.7 ~ 42%. If the latter happens over a decade that would already correspond to 3.5% annual growth.&nbsp;&nbsp;</p>
+
+
+
+<p>However, if AI also improves productivity of other industries (e.g. by discovering new ideas) then the contribution can grow even beyond those that are not directly automated. To be clear, to the extent AI contributes to research and development, I expect this would be by accelerating science and making scientists, researchers,&nbsp; and inventors more productive. This means that in the coming years, funding human scientists will offer an even higher return on investment than it has in the past.&nbsp;</p>
+
+
+
+<p>Below I offer some vague intuitions and unfounded extrapolations to try to get at how much and how fast we could expect AI to contribute to growth.</p>
+
+
+
+<p>Note that there are <a href="https://www.oecd.org/en/topics/policy-issues/well-being-and-beyond-gdp.html">critiques of GDP</a> as a measure of progress, and various alternative measures have been proposed. However, many of these are also at least loosely correlated with GDP, with a spike in one corresponding to a spike in the other. E.g., see this chart of the <a href="https://ourworldindata.org/grapher/augmented-human-development-index">augmented human development index</a> of the U.S. and Japan.</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png"><img data-attachment-id="8846" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-26/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png" data-orig-size="2048,1446" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=656" loading="lazy" width="1024" height="723" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=1024" alt="" class="wp-image-8846" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png 2048w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-2-2.png?w=1440 1440w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>While I am sure many of AI’s impacts will not be captured by the GDP, I believe that if it will be truly as transformative as the industrial revolution, this will show up in the GDP as well.</p>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading">Intuition from METR tasks</h2>
+
+
+
+<p>Let us make the (very rough and not really justified) assumption that in a certain industry or job, the tasks are “heavy tailed” where the fraction of tasks that take a person at least T time to complete shrinks proportionally to 1/T.&nbsp; In this case, the time horizon is proportional to the fraction of tasks that have not been automated. This means that the “doubling time” is the same as the “halving time” of the fraction of tasks that have not been automated yet.</p>
+
+
+
+<p>Another way to think about it is by thinking of the “ELO analogy” &#8211; assume the distribution of “ELO ratings” of tasks is such that the fraction of tasks with an ELO rating more than E is roughly exp(-E).&nbsp; (For chess players the distribution of ELO scores is roughly <a href="https://arxiv.org/pdf/1103.1530">normal</a>, which would be ~ exp(-E²).)&nbsp;</p>
+
+
+
+<p>If we assume a “halving time” of 6 months, it would take about 2 years from the point of time that AI’s automates half of the tasks in some industry, to the point in time that they automate 31/32 ~ 97% of the tasks in it.</p>
+
+
+
+<p>This assumption is extremely aggressive in the sense that it is focused on <strong>capabilities</strong> and ignores <strong>diffusion</strong>. It is possible that AI could theoretically automate a large fraction of tasks but for many reasons it would not automate them in practice. (Though it is also possible that diffusion will progress unevenly, with sudden unlocking of latent capabilities.)&nbsp; It is also important to note that this intuition runs counter to broad trends in automation over the last 80 years which have historically been <strong>linear</strong> &#8211; with the share of automated tasks growing slowly and steadily, with a single-digit percent rate of automation that is often declining over time. See the following charts from C. Jones and Tonetti (2025), via ChatGPT:</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png"><img data-attachment-id="8852" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-28/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png" data-orig-size="1600,580" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=656" loading="lazy" width="1024" height="371" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=1024" alt="" class="wp-image-8852" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png?w=1440 1440w, https://windowsontheory.org/wp-content/uploads/2025/11/image-3.png 1600w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>Hence if AI will cause an exponential decay of the share of tasks performed by labor, it would be a break with previous trends in automation and very different from what we have seen in the past.</p>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading">AI as increasing population</h2>
+
+
+
+<p>One way to view AI is as injecting to the economy each year <strong>t</strong> a number <strong>N(t)</strong> of new “workers” that have a certain quality <strong>Q(t) </strong>&#8211; quality could correspond to the fraction of economically useful tasks these workers can do, so can correspond to both “years of schooling” and the generality of their ability. We can define Q(t) as one over the fraction of tasks that have not yet been automated in the corresponding industry.</p>
+
+
+
+<p>Algorithmic advances in AI and the overall compute budget will determine the mixture of workers and quality. As a point of comparison, the U.S. population has been growing at about 2m per year due to natural growth and immigration, and the U.S. labor force is about 160m people.</p>
+
+
+
+<p>At a rough level, if capital and productivity is fixed, and we assume a Cobb-Douglas production function with GDP being proportional to KᵃL¹⁻ᵃ with a=0.4 then increasing the labor force by a factor of C will increase the GDP by a factor of C⁰ᐧ⁶. If AI creates 10m new virtual employees, that would increase the GDP by a factor of (170/160)⁰ᐧ⁶&nbsp; which is about 4 percent.&nbsp;</p>
+
+
+
+<p>If it is 50m new employees this would be about 18%, and if AI doubles the workforce then the growth would be ~50%. Of course, the number of AI “virtual workers” could potentially be orders of magnitude more, at which point these calculations are likely not to make much sense. (There is a book called “<a href="https://en.wikipedia.org/wiki/One_Billion_Americans">One Billion Americans</a>” but I think even its author did not ponder what would happen if there were one trillion Americans&#8230;)<br><br>It is hard to give predictions on either N(t) or Q(t), but it seems reasonable to expect that both will grow exponentially. At the extreme, if we fix the quality Q then we could expect N(t) to increase 10x per year (as costs for a fixed model quality have decreased.) But perhaps a starting point assumption would be that the product of both will grow at the 4x/year METR rate, with both Q and N doubling every year.&nbsp; (Note that N(t) is the number of <strong>new</strong> workers, and so is equal to TN(t)-TN(t-1) where TN(t) is the total number of AI workers at year t, however since the derivative of an exponential is exponential then it does not matter, especially if the base of this exponential is 2.)&nbsp;</p>
+
+
+
+<p>Such growth is sufficient to ensure that once AI starts providing a non-trivial number of new workers (e.g., 100K workers in the U.S.) then within a decade, AI will be the dominant source of labor in the U.S.</p>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading">Substitution and automation effects</h2>
+
+
+
+<p>A simplified version of the model of <a href="https://www.kellogg.northwestern.edu/faculty/jones-ben/htm/Artificial_Intelligence_in_Research_and_Development.pdf">B. Jones (2025</a>) is that the impact of AI on productivity is determined by the <em>harmonic mean</em> of the automatable and non automatable tasks.&nbsp;</p>
+
+
+
+<p>Imagine that a ρ fraction of R&amp;D tasks cannot be automated, and 1-ρ fraction of tasks can be automated and be carried out at far lower cost than humans. For simplicity, let’s assume that the human productivity in non-automated tasks is 1, and the AI productivity in automated tasks is λ&gt;&gt;1.</p>
+
+
+
+<p>Then the improvement in productivity due to automation can be modeled as the Harmonic average of 1 and λ with weights ρ and 1-ρ respectively, that is:</p>
+
+
+
+<p>(ρ/1 + (1−ρ)/λ)⁻¹</p>
+
+
+
+<p>Note that unlike the arithmetic or geometric means, even if λ is infinite, the maximum that this can reach is 1/ρ. This makes sense if we think of tasks as non-substitutable and so the maximum productivity gain we can get is if we automated tasks that take humans 90% of the time, so that now one worker can do 10x time the work per time unit.</p>
+
+
+
+<p>Jones shows that in such a model, in order to get significant productivity gains, both ρ must shrink and λ must grow. If one of them stays “stuck” then so will productivity. Jones has the following graph of the regimes where we can get “transformative AI” in the sense of 10x productivity growth, which would be similar to the scale of the productivity increase via the industrial revolution. (If I am following the math correctly, the condition under Jones’ assumptions for this graph is that 9/[(2−ρ)/√ λ + 2ρ]²&nbsp; ≥ 10.)</p>
+
+
+
+<figure class="wp-block-image size-large is-resized"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image.png"><img data-attachment-id="8840" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-20/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image.png" data-orig-size="808,616" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=656" loading="lazy" width="808" height="616" src="https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=808" alt="" class="wp-image-8840" style="width:572px;height:auto" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image.png 808w, https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image.png?w=768 768w" sizes="(max-width: 808px) 100vw, 808px" /></a></figure>
+
+
+
+<p>Figure 5 in <a href="https://www.kellogg.northwestern.edu/faculty/jones-ben/htm/Artificial_Intelligence_in_Research_and_Development.pdf">Jones</a>: Regime of λ,ρ that leads to transformative AI in harmonic mean case.</p>
+
+
+
+<p>One way to think about this graph is what happens if we assume that, via the mechanisms discussed above, every year we make progress in both ρ (fraction of tasks not yet automated) and λ (productivity factor of AI in doing these tasks).&nbsp;</p>
+
+
+
+<p>As discussed above, it is a “leap of faith” but arguably not completely crazy to assume that at some point (maybe once we reach a threshold such as AIs doing 8 hours of work) ρ will shrink by a factor of 4x per year, while λ will increase by a factor of 10x per year. At this rate, within a year, we would move from the lefthand corner of this graph (1,1) to the point λ =10 , ρ=¼ which is almost at the TAI boundary.&nbsp; (Note that Jones assumes that half of the tasks have already been automated, so it might take us a while to get to the lefthand corner of the graph. Also, accounting for the “ideas getting harder to find” effect could decrease the shrinking rate, see section 4.4 in the paper.)<br></p>
+
+
+
+<p>The assumption on ρ shrinking by a 4x factor is very aggressive and arguably unrealistic. Perhaps a much smaller factor such as 1.1 is more reasonable, which would correspond to automating a 1/1.1 ~ 9% of remaining tasks each year (as opposed to 75% in the case of 4x shrinkage of ρ). Here is a plot of how many years from the (1,1) corner it will take for transformative AI as a function of the fraction of tasks automated per year, for various values of cost decrease (growth in λ).</p>
+
+
+
+<figure class="wp-block-image size-large"><a href="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png"><img data-attachment-id="8856" data-permalink="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/image-29/" data-orig-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png" data-orig-size="1382,1062" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="image" data-image-description="" data-image-caption="" data-medium-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=300" data-large-file="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=656" loading="lazy" width="1024" height="786" src="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=1024" alt="" class="wp-image-8856" srcset="https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=1024 1024w, https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=150 150w, https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=300 300w, https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png?w=768 768w, https://windowsontheory.org/wp-content/uploads/2025/11/image-4.png 1382w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></figure>
+
+
+
+<p>We see that as long as the rate is significant, we can get to transformative growth within one to two decades. Note also that this is less sensitive to decrease in costs (growth in λ), which could bode well for automating manual tasks.&nbsp;</p>
+
+
+
+<p>The bottom line is that the question on whether AI can lead to unprecedented growth amounts to whether its exponential growth in capabilities will lead to the fraction of unautomated tasks itself decreasing at exponential rates.</p>
+
+
+
+<p><br><strong>Acknowledgements</strong>: Thanks to Bharat Chandar, Jason Furman, Benjamin Jones and Chad Jones for comments and discussions on this post.</p>
+
+
+
+<p></p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-twitter-8839"
+				class="share-twitter sd-button share-icon"
+				href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/?share=twitter"
+				target="_blank"
+				aria-labelledby="sharing-twitter-8839"
+				>
+				<span id="sharing-twitter-8839" hidden>Click to share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li class="share-end"></li></ul></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-32349634-8839-690c2fbf85658' data-src='//widgets.wp.com/likes/index.html?ver=20251106#blog_id=32349634&amp;post_id=8839&amp;origin=windowsontheory.wordpress.com&amp;obj_id=32349634-8839-690c2fbf85658&amp;domain=windowsontheory.org' data-name='like-post-frame-32349634-8839-690c2fbf85658' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<span class="cat-links">
+			Posted in <a href="https://windowsontheory.org/category/uncategorized/" rel="category tag">Uncategorized</a>		</span>
+					</footer><!-- .entry-footer -->
+
+			<div class="entry-author author-avatar-show">
+						<div class="author-avatar">
+				<img referrerpolicy="no-referrer" alt='Unknown&#039;s avatar' src='https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=60&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=60&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=90&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=120&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=180&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=240&#038;d=identicon&#038;r=G 4x' class='avatar avatar-60' height='60' width='60' loading='lazy' decoding='async' />			</div><!-- .author-avatar -->
+			
+			<div class="author-heading">
+				<h2 class="author-title">
+					Published by <span class="author-name">Boaz Barak</span>				</h2>
+			</div><!-- .author-heading -->
+
+			<p class="author-bio">
+								<a class="author-link" href="https://windowsontheory.org/author/windowsontheory/" rel="author">
+					View all posts by Boaz Barak				</a>
+			</p><!-- .author-bio -->
+		</div><!-- .entry-auhtor -->
+		</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" aria-label="Posts">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://windowsontheory.org/2025/09/10/cs-2881-ai-safety/" rel="prev"><span class="meta-nav">&lsaquo; Previous</span>CS 2881: AI&nbsp;Safety</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://windowsontheory.org/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+
+
+<div class="comment-form__verbum transparent"></div><div class="verbum-form-meta"><input type='hidden' name='comment_post_ID' value='8839' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+
+			<input type="hidden" name="highlander_comment_nonce" id="highlander_comment_nonce" value="f54234cecc" />
+			<input type="hidden" name="verbum_show_subscription_modal" value="" /></div><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="16971338bd" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="6"/><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	<div id="secondary" class="widget-area" role="complementary">
+		<aside id="block-2" class="widget widget_block widget_text">
+<p>Follow me on <a href="https://twitter.com/boazbaraktcs">Twitter ( @boazbaraktcs )</a> </p>
+</aside><aside id="blog_subscription-4" class="widget widget_blog_subscription jetpack_subscription_widget"><h1 class="widget-title"><label for="subscribe-field">Subscribe to Blog via Email</label></h1>
+
+			<div class="wp-block-jetpack-subscriptions__container">
+			<form
+				action="https://subscribe.wordpress.com"
+				method="post"
+				accept-charset="utf-8"
+				data-blog="32349634"
+				data-post_access_level="everybody"
+				id="subscribe-blog"
+			>
+				<p>Enter your email address to subscribe to this blog and receive notifications of new posts by email.</p>
+				<p id="subscribe-email">
+					<label
+						id="subscribe-field-label"
+						for="subscribe-field"
+						class="screen-reader-text"
+					>
+						Email Address:					</label>
+
+					<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							
+							style="width: 95%; padding: 1px 10px"
+							placeholder="Email Address"
+							value=""
+							id="subscribe-field"
+							required
+						/>				</p>
+
+				<p id="subscribe-submit"
+									>
+					<input type="hidden" name="action" value="subscribe"/>
+					<input type="hidden" name="blog_id" value="32349634"/>
+					<input type="hidden" name="source" value="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/"/>
+					<input type="hidden" name="sub-type" value="widget"/>
+					<input type="hidden" name="redirect_fragment" value="subscribe-blog"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="1ed603e252" />					<button type="submit"
+													class="wp-block-button__link"
+																	>
+						Subscribe					</button>
+				</p>
+			</form>
+							<div class="wp-block-jetpack-subscriptions__subscount">
+					Join 1,129 other subscribers				</div>
+						</div>
+			
+</aside><aside id="search-2" class="widget widget_search"><h1 class="widget-title">Search This Blog</h1><form role="search" method="get" class="search-form" action="https://windowsontheory.org/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="top-posts-4" class="widget widget_top-posts"><h1 class="widget-title">Top Posts</h1><ul><li><a href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" class="bump-view" data-bump-view="tp" aria-current="page">Thoughts by a non-economist on AI and economics</a></li><li><a href="https://windowsontheory.org/2025/07/20/ai-safety-course-intro-blog/" class="bump-view" data-bump-view="tp">AI Safety Course Intro Blog</a></li><li><a href="https://windowsontheory.org/2025/06/24/machines-of-faithful-obedience/" class="bump-view" data-bump-view="tp">Machines of Faithful Obedience</a></li><li><a href="https://windowsontheory.org/2025/09/10/cs-2881-ai-safety/" class="bump-view" data-bump-view="tp">CS 2881: AI Safety</a></li><li><a href="https://windowsontheory.org/2016/10/14/toca-revolution-begins-nov-4/" class="bump-view" data-bump-view="tp">TOCA-Revolution Begins: Nov 4</a></li><li><a href="https://windowsontheory.org/2019/12/05/deep-double-descent/" class="bump-view" data-bump-view="tp">Deep Double Descent (cross-posted on OpenAI blog)</a></li><li><a href="https://windowsontheory.org/2025/01/24/six-thoughts-on-ai-safety/" class="bump-view" data-bump-view="tp">Six Thoughts On AI Safety</a></li><li><a href="https://windowsontheory.org/2015/11/03/advice-for-the-budding-theorist/" class="bump-view" data-bump-view="tp">Advice for the budding theorist</a></li><li><a href="https://windowsontheory.org/2023/10/27/petition-by-cs-math-laureates-freedom-for-kidnapped-children/" class="bump-view" data-bump-view="tp">Petition by CS &amp; Math Laureates: Freedom for kidnapped children</a></li><li><a href="https://windowsontheory.org/2014/09/19/farewell-microsoft-research-silicon-valley-lab/" class="bump-view" data-bump-view="tp">Farewell Microsoft-Research Silicon Valley Lab</a></li></ul></aside><aside id="recent-comments-3" class="widget widget_recent_comments"><h1 class="widget-title">Recent Comments</h1>				<table class="recentcommentsavatar" cellspacing="0" cellpadding="0" border="0">
+					<tr><td title="Boaz Barak" class="recentcommentsavatartop" style="height:48px; width:48px;"><a href="https://windowsontheory.wordpress.com" rel="nofollow"><img referrerpolicy="no-referrer" alt='Boaz Barak&#039;s avatar' src='https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/c68b52511be55be1911e97f188c8f1e6d70d055644c4430878b827acb1f0efcf?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' /></a></td><td class="recentcommentstexttop" style=""><a href="https://windowsontheory.wordpress.com" rel="nofollow">Boaz Barak</a> on <a href="https://windowsontheory.org/2025/07/20/ai-safety-course-intro-blog/#comment-77893">AI Safety Course Intro&nbsp;Bl&hellip;</a></td></tr><tr><td title="aroraprinceton" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="http://islearningeasy.wordpress.com" rel="nofollow"><img referrerpolicy="no-referrer" alt='aroraprinceton&#039;s avatar' src='https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=48&#038;d=identicon&#038;r=G' srcset='https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=48&#038;d=identicon&#038;r=G 1x, https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=72&#038;d=identicon&#038;r=G 1.5x, https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=96&#038;d=identicon&#038;r=G 2x, https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=144&#038;d=identicon&#038;r=G 3x, https://1.gravatar.com/avatar/7e45c95324669134b5ed27cc1ff79fe078cdacc318e14d0edab7c414a0af3de0?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' /></a></td><td class="recentcommentstextend" style=""><a href="http://islearningeasy.wordpress.com" rel="nofollow">aroraprinceton</a> on <a href="https://windowsontheory.org/2025/07/20/ai-safety-course-intro-blog/#comment-77892">AI Safety Course Intro&nbsp;Bl&hellip;</a></td></tr><tr><td title="Santiago Tomas Aranguri Diaz" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="http://aranguri.wordpress.com" rel="nofollow"><img referrerpolicy="no-referrer" alt='Santiago Tomas Aranguri Diaz&#039;s avatar' src='https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/f5396dd4c7a118a345861d333582fe3fe274ad2520a457101060b6fe74ca8666?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' /></a></td><td class="recentcommentstextend" style=""><a href="http://aranguri.wordpress.com" rel="nofollow">Santiago Tomas Arang&hellip;</a> on <a href="https://windowsontheory.org/2025/01/24/six-thoughts-on-ai-safety/#comment-77845">Six Thoughts On AI&nbsp;Safety</a></td></tr><tr><td title="Saturday assorted links | Factuel News | News that is Facts" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="https://factuel.news/index.php/2025/01/25/saturday-assorted-links-315/" rel="nofollow"></a></td><td class="recentcommentstextend" style=""><a href="https://factuel.news/index.php/2025/01/25/saturday-assorted-links-315/" rel="nofollow">Saturday assorted li&hellip;</a> on <a href="https://windowsontheory.org/2025/01/24/six-thoughts-on-ai-safety/#comment-77844">Six Thoughts On AI&nbsp;Safety</a></td></tr><tr><td title="Saturday assorted links - Finance genio" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="https://financegenio.com/saturday-assorted-links-3/" rel="nofollow"></a></td><td class="recentcommentstextend" style=""><a href="https://financegenio.com/saturday-assorted-links-3/" rel="nofollow">Saturday assorted li&hellip;</a> on <a href="https://windowsontheory.org/2025/01/24/six-thoughts-on-ai-safety/#comment-77843">Six Thoughts On AI&nbsp;Safety</a></td></tr>				</table>
+				</aside>
+		<aside id="recent-posts-2" class="widget widget_recent_entries">
+		<h1 class="widget-title">Recent Posts</h1>
+		<ul>
+											<li>
+					<a href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" aria-current="page">Thoughts by a non-economist on AI and&nbsp;economics</a>
+											<span class="post-date">November 4, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/09/10/cs-2881-ai-safety/">CS 2881: AI&nbsp;Safety</a>
+											<span class="post-date">September 10, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/07/20/ai-safety-course-intro-blog/">AI Safety Course Intro&nbsp;Blog</a>
+											<span class="post-date">July 20, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/06/24/machines-of-faithful-obedience/">Machines of Faithful&nbsp;Obedience</a>
+											<span class="post-date">June 24, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/06/12/trevisan-prize-guest-post-by-alon-rosen/">Trevisan prize (guest post by Alon&nbsp;Rosen)</a>
+											<span class="post-date">June 12, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/03/26/call-for-papers-information-theoretic-crpytography/">Call for papers Information-Theoretic Crpytography</a>
+											<span class="post-date">March 26, 2025</span>
+									</li>
+											<li>
+					<a href="https://windowsontheory.org/2025/03/03/knuth-prize-call-for-nominations/">Knuth prize call for&nbsp;nominations</a>
+											<span class="post-date">March 3, 2025</span>
+									</li>
+					</ul>
+
+		</aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<label class="screen-reader-text" for="archives-dropdown-2">Archives</label>
+		<select id="archives-dropdown-2" name="archive-dropdown">
+			
+			<option value="">Select Month</option>
+				<option value='https://windowsontheory.org/2025/11/'> November 2025 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2025/09/'> September 2025 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2025/07/'> July 2025 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2025/06/'> June 2025 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2025/03/'> March 2025 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2025/02/'> February 2025 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2025/01/'> January 2025 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/11/'> November 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/09/'> September 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/08/'> August 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/07/'> July 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/06/'> June 2024 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2024/04/'> April 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2024/03/'> March 2024 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2023/12/'> December 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/10/'> October 2023 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2023/08/'> August 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/07/'> July 2023 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2023/06/'> June 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/05/'> May 2023 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2023/04/'> April 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/03/'> March 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/02/'> February 2023 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2023/01/'> January 2023 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2022/11/'> November 2022 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2022/10/'> October 2022 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2022/09/'> September 2022 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2022/07/'> July 2022 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2022/06/'> June 2022 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2022/05/'> May 2022 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2022/04/'> April 2022 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2022/03/'> March 2022 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2022/01/'> January 2022 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2021/12/'> December 2021 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2021/11/'> November 2021 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2021/10/'> October 2021 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2021/09/'> September 2021 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2021/08/'> August 2021 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2021/07/'> July 2021 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2021/06/'> June 2021 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2021/05/'> May 2021 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2021/04/'> April 2021 &nbsp;(8)</option>
+	<option value='https://windowsontheory.org/2021/03/'> March 2021 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2021/02/'> February 2021 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2021/01/'> January 2021 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2020/12/'> December 2020 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2020/11/'> November 2020 &nbsp;(7)</option>
+	<option value='https://windowsontheory.org/2020/10/'> October 2020 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2020/09/'> September 2020 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2020/08/'> August 2020 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2020/07/'> July 2020 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2020/06/'> June 2020 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2020/05/'> May 2020 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2020/04/'> April 2020 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2020/03/'> March 2020 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2020/01/'> January 2020 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2019/12/'> December 2019 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2019/11/'> November 2019 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2019/10/'> October 2019 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2019/09/'> September 2019 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2019/08/'> August 2019 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2019/07/'> July 2019 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2019/06/'> June 2019 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2019/04/'> April 2019 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2019/03/'> March 2019 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2019/02/'> February 2019 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2019/01/'> January 2019 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2018/12/'> December 2018 &nbsp;(11)</option>
+	<option value='https://windowsontheory.org/2018/11/'> November 2018 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2018/10/'> October 2018 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2018/09/'> September 2018 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2018/08/'> August 2018 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2018/07/'> July 2018 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2018/06/'> June 2018 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2018/05/'> May 2018 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2018/04/'> April 2018 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2018/03/'> March 2018 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2018/02/'> February 2018 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2018/01/'> January 2018 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2017/12/'> December 2017 &nbsp;(10)</option>
+	<option value='https://windowsontheory.org/2017/11/'> November 2017 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2017/10/'> October 2017 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2017/09/'> September 2017 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2017/08/'> August 2017 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2017/07/'> July 2017 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2017/06/'> June 2017 &nbsp;(7)</option>
+	<option value='https://windowsontheory.org/2017/05/'> May 2017 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2017/04/'> April 2017 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2017/03/'> March 2017 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2017/01/'> January 2017 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/12/'> December 2016 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/11/'> November 2016 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/10/'> October 2016 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2016/09/'> September 2016 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2016/08/'> August 2016 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/07/'> July 2016 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2016/06/'> June 2016 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2016/05/'> May 2016 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/04/'> April 2016 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2016/03/'> March 2016 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2016/02/'> February 2016 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2016/01/'> January 2016 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2015/12/'> December 2015 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2015/11/'> November 2015 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2015/10/'> October 2015 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2015/09/'> September 2015 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2015/08/'> August 2015 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2015/07/'> July 2015 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2015/06/'> June 2015 &nbsp;(8)</option>
+	<option value='https://windowsontheory.org/2015/05/'> May 2015 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2015/04/'> April 2015 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2015/03/'> March 2015 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2015/01/'> January 2015 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2014/12/'> December 2014 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2014/11/'> November 2014 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2014/10/'> October 2014 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2014/09/'> September 2014 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2014/08/'> August 2014 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2014/07/'> July 2014 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2014/06/'> June 2014 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2014/04/'> April 2014 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2014/03/'> March 2014 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2014/02/'> February 2014 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2014/01/'> January 2014 &nbsp;(2)</option>
+	<option value='https://windowsontheory.org/2013/12/'> December 2013 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2013/11/'> November 2013 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2013/10/'> October 2013 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2013/09/'> September 2013 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2013/08/'> August 2013 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2013/07/'> July 2013 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2013/06/'> June 2013 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2013/05/'> May 2013 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2013/04/'> April 2013 &nbsp;(8)</option>
+	<option value='https://windowsontheory.org/2013/03/'> March 2013 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2013/02/'> February 2013 &nbsp;(7)</option>
+	<option value='https://windowsontheory.org/2013/01/'> January 2013 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2012/12/'> December 2012 &nbsp;(1)</option>
+	<option value='https://windowsontheory.org/2012/11/'> November 2012 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2012/10/'> October 2012 &nbsp;(7)</option>
+	<option value='https://windowsontheory.org/2012/09/'> September 2012 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2012/08/'> August 2012 &nbsp;(3)</option>
+	<option value='https://windowsontheory.org/2012/07/'> July 2012 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2012/06/'> June 2012 &nbsp;(4)</option>
+	<option value='https://windowsontheory.org/2012/05/'> May 2012 &nbsp;(9)</option>
+	<option value='https://windowsontheory.org/2012/04/'> April 2012 &nbsp;(5)</option>
+	<option value='https://windowsontheory.org/2012/03/'> March 2012 &nbsp;(6)</option>
+	<option value='https://windowsontheory.org/2012/02/'> February 2012 &nbsp;(5)</option>
+
+		</select>
+
+			<script type="text/javascript">
+/* <![CDATA[ */
+
+(function() {
+	var dropdown = document.getElementById( "archives-dropdown-2" );
+	function onSelectChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value !== '' ) {
+			document.location.href = this.options[ this.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onSelectChange;
+})();
+
+/* ]]> */
+</script>
+</aside><aside id="rss_links-2" class="widget widget_rss_links"><h1 class="widget-title">RSS</h1><ul><li><a href="https://windowsontheory.org/feed/" title="Subscribe to Posts">RSS - Posts</a></li><li><a href="https://windowsontheory.org/comments/feed/" title="Subscribe to Comments">RSS - Comments</a></li></ul>
+</aside><aside id="rss-5" class="widget widget_rss"><h1 class="widget-title"><a class="rsswidget" href="https://cstheory-jobs.org/feed/" title="Syndicate this content"><img style="background: orange; color: white; border: none;" width="14" height="14" src="https://s.wordpress.com/wp-includes/images/rss.png?m=1354137473i" alt="RSS" /></a> <a class="rsswidget" href="https://cstheory-jobs.org" title="">Theory jobs</a></h1><ul><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/11/05/postdoc-at-carnegie-mellon-university-apply-by-december-10-2025/' title='We are hiring three postdoctoral fellows in the study of mathematical cognition, including but not limited to: (1) computational complexity, proof complexity, metamathematics, logic — anything relevant to how we seek for, and understand, mathematical proofs. (2) the use AI tools, of any kind, as aids in proof verification and discovery. (3) type theory (theo [&hellip;]'>Postdoc at Carnegie Mellon University (apply by December 10, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/11/04/postdoc-at-university-of-toronto-apply-by-december-15-2025/' title='The theory group at the University of Toronto is currently accepting applications for postdoctoral positions, starting in the academic year 2026-2027. We will be considering candidates from all areas of theoretical computer science. The positions are typically for two years, and are intended to allow junior scientists the freedom to pursue ambitious and inde [&hellip;]'>Postdoc at University of Toronto (apply by December 15, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/11/04/postdoc-at-ideal-institute-northwestern-ttic-and-uic-apply-by-december-31-2025/' title='The Institute for Data, Econometrics, Algorithms, and Learning (IDEAL) invites applications for three postdoctoral positions starting Fall 2026. IDEAL is an NSF-funded Institute organized by Northwestern, UIC, TTIC, UChicago, IIT, and Loyola, with partners at Google Research, advancing the foundations of data science and theoretical computer science. Website [&hellip;]'>postdoc at IDEAL Institute (Northwestern, TTIC, and UIC) (apply by December 31, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/11/01/faculty-tenured-track-or-tenured-at-emory-university-apply-by-december-1-2025/' title='The Department of Computer Science at Emory University seeks applications for a faculty position in either Theory or Systems. The search is open rank, either tenure-track or tenured. Submit a cover letter, a CV, research and teaching statements, and 3+ recommendations. Review begins December 1, 2025 and will continue until the position is filled. Website: [… [&hellip;]'>faculty, tenured-track or tenured at Emory University (apply by December 1, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/30/faculty-at-imperial-college-apply-by-december-15-2025/' title='The Department of Computing at Imperial wishes to appoint up to 4 Assistant Professors in 2026 across key high-impact areas that will strengthen its existing research portfolio, including the area theoretical computer science (algorithms and data structures, complexity theory, cryptography and information theory, quantum algorithms, and theory of quantum com [&hellip;]'>Faculty at Imperial College (apply by December 15, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/29/tenured-tenure-track-positions-at-new-york-university-shanghai-apply-by-december-15-2025/' title='NYU Shanghai is currently inviting applications for multiple Tenured or Tenure-Track positions. Candidates in theory are particularly encouraged to apply. The review will begin on December 15, 2025, and will continue until the position is ﬁlled. Website: https://apply.interfolio.com/176211 Email: siyao.guo@nyu.edu'>Tenured/Tenure-Track Positions at New York University Shanghai (apply by December 15, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/28/postdoc-at-epfl-apply-by-february-28-2026/' title='Theory Group at EPFL has multiple postdoc positions available. Application review starts in early January 2026 (with final deadline February 28th). Topics: probabilistic proofs, combinatorial optimization, approximation algorithms, online algorithms, sublinear algorithms, (quantum) computational complexity (circuits/proofs/communication), quantum cryptograph [&hellip;]'>Postdoc at EPFL (apply by February 28, 2026)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/23/quics-hartree-postdoctoral-fellowships-at-joint-center-for-quantum-information-and-computer-science-quics-apply-by-december-1-2025/' title='The Joint Center for Quantum Information and Computer Science (QuICS, http://quics.umd.edu) is seeking exceptional candidates for the QuICS Hartree Postdoctoral Fellowships in Quantum Information and Computer Science. Apply at: https://umd.wd1.myworkdayjobs.com/en-US/UMCP/job/QuICS-Hartree-Postdoctoral-Fellow_JR102700 Website: https://umd.wd1.myworkdayjobs.c [&hellip;]'>QuICS Hartree Postdoctoral Fellowships at Joint Center for Quantum Information and Computer Science (QuICS) (apply by December 1, 2025)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/22/postdoc-at-university-of-michigan-apply-by-january-10-2026/' title='The Theory Group at the University of Michigan invites applications for multiple postdoctoral positions beginning September 2026. The position will have an initial appointment for one year, but may be extended depending on the circumstances. Applicants should be recent PhDs with interests that align well with our ongoing research. Website: https://forms.gle/ [&hellip;]'>Postdoc at University of Michigan (apply by January 10, 2026)</a></li><li><a class='rsswidget' href='https://cstheory-jobs.org/2025/10/21/faculty-at-aarhus-university-apply-by-january-5-2026/' title='Computer Science, Aarhus University is hiring up to six professors of any rank and any area. The department has a strong emphasis on theoretical computer science, database systems and machine learning/AI, both from a theory and applied side. We strongly encourage applicants in these areas to further strengthen our profile. Website: https://international.au.d [&hellip;]'>faculty at Aarhus University (apply by January 5, 2026)</a></li></ul></aside><aside id="rss-6" class="widget widget_rss"><h1 class="widget-title"><a class="rsswidget" href="https://thmatters.wordpress.com/feed/" title="Syndicate this content"><img style="background: orange; color: white; border: none;" width="14" height="14" src="https://s.wordpress.com/wp-includes/images/rss.png?m=1354137473i" alt="RSS" /></a> <a class="rsswidget" href="https://thmatters.wordpress.com" title="">Theory matters</a></h1><ul><li><a class='rsswidget' href='https://thmatters.wordpress.com/2025/10/24/stoc-2026-experimental-program-announcement/' title='For all authors preparing submissions for this year’s STOC, the conference is running a new experimental program to provide automated pre-submission feedback. We are offering authors the opportunity to opt-in and receive a review of their paper generated by an advanced LLM-based tool (built on Google’s Gemini model) that is optimized for checking mathematica [&hellip;]'>STOC 2026 Experimental Program Announcement</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2025/09/07/focs-test-of-time-award-call-for-nominations/' title='The FOCS 2025 ToT Award committee is now accepting nominations. The target years for the Test of Time Awards in 2025 are for papers presented at the FOCS conferences in 1995, 2005, and 2015. Following guidance from the FOCS Steering Committee, while focusing on the target years, the award committee will consider nominations for exceptional […]'>FOCS Test of Time Award: Call for Nominations</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2024/06/09/focs-2024-test-of-time-awards-nominations/' title='From Jin-Yi Cai (chair of the committee): The FOCS 2024 Test of Time Awards committee is soliciting nominations. Nominations are due July 31, 2024. More details are available at https://tc.computer.org/tcmf/2024/05/28/focs-test-of-time-award-call-for-nominations-2024/.'>FOCS 2024 Test of Time Awards Nominations</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2024/03/03/knuth-prize-call-for-nominations/' title='Please consider nominating someone for the Knuth prize! The deadline is March 31 and the call is here: https://www.sigact.org/prizes/knuth.html'>Knuth Prize call for nominations</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/10/18/new-book-on-probability/' title='A new book announcement from Mor Harchol-Balter: Dear Theory Friends, I am excited to announce that I just completed writing a new textbook, titled Introduction to Probability for Computing, published by Cambridge University Press, 2024.  This book is based on my “Probability and Computing” class at CMU.   It should be useful for teaching undergraduates and [&hellip;]'>New book on Probability</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/10/15/wikipedia-edit-a-thon-at-focs/' title='FOCS’23 is hosting a Wikipedia edit-a-thon on Monday, Nov 6, 2023. Let’s get together and create or edit Wikipedia pages for CS Theory entries. Both new and experienced Wiki editors are welcome to participate!  Read more and sign up at https://sites.google.com/view/tcs-edit-a-thon. – Divyarthi Mohan, Aviad Rubinstein, Ewin Tang, and Shuchi Chawla (organizers [&hellip;]'>Wikipedia edit-a-thon at FOCS</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/08/22/1443/' title='We have collected several documents here. The first is a guide for PC chairing written by Julia Chuzhoy and Anupam Gupta based on their experience with STOC, and passed along to other chairs.  The second is a guide for general chairs / local organizers, written mostly by David Kempe but also thanks to Michael Hoffmann, […]'>PC chair and general chair guidelines for TCS conferences</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/08/16/1421/' title='You may remember that a task force was convened by CATCS to investigate approaches to modifying aspects of the TCS community, especially our publishing culture, and to enhance connections with other areas of CS and be as welcoming as possible to a broad range of contributions within theory. A survey was given to members of […]'>TCS Insularity Survey Results</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/01/31/tcs-job-market-profiles-2/' title='Are you or your institution looking to hire a theoretician? Check out these job market profiles of TCS candidates. Feel free to share widely within your network. This information can also be found under the “TCS Job Market” tab in the menu above. Candidates on the TCS job market: fill out this form to get […]'>TCS Job Market profiles</a></li><li><a class='rsswidget' href='https://thmatters.wordpress.com/2023/01/30/rotator-position-at-nsf/' title='I posted earlier about a permanent program director position at NSF in CCF/AF. There is also an opening for a rotator position. This is a great opportunity for anyone seeking a short (2-3 year) sabbatical from their academic position, and a wonderful and highly impactful way of serving the community. Please consider applying! You can […]'>Rotator position at NSF</a></li></ul></aside><aside id="rss-8" class="widget widget_rss"><h1 class="widget-title"><a class="rsswidget" href="https://theorydish.blog/feed/" title="Syndicate this content"><img style="background: orange; color: white; border: none;" width="14" height="14" src="https://s.wordpress.com/wp-includes/images/rss.png?m=1354137473i" alt="RSS" /></a> <a class="rsswidget" href="https://theorydish.blog" title="Stanford&#039;s CS Theory Research Blog">Theory Dish</a></h1><ul><li><a class='rsswidget' href='https://theorydish.blog/2025/09/15/quickly-approximating-shapley-games/' title='In this blog post, we will talk about some recent advances in algorithms for approximately solving Shapley Games. What is a Shapley Game? At an intuitive level, Shapley games capture the idea of extending one-shot 2-player games to be occurring over multiple stages. Explicitly, Shapley games are played on an underlying state space . At each , the two players [&hellip;]'>Quickly approximating Shapley Games</a></li><li><a class='rsswidget' href='https://theorydish.blog/2025/04/21/choosing-the-best-ring-for-mpc/' title='In this post, we’ll discuss how Galois rings (a recent algebraic structure) improve the communication complexity of dishonest multiparty computation (MPC) protocols.Before we dive into MPC, I’ll take a brief detour to discuss how computation is usually modeled in cryptography. When cryptographers think about computation, they often think about circuits compr [&hellip;]'>Choosing the best ring … for MPC!</a></li><li><a class='rsswidget' href='https://theorydish.blog/2025/02/16/focs-2025-cfp-is-out/' title='The 66th Annual Symposium on Foundations of Computer Science (FOCS 2025), sponsored by the IEEE Computer Society Technical Committee on Mathematical Foundations of Computing, will be held in Sydney, Australia, December 14-17. Papers presenting new and original research on theory of computation are sought. Typical but not exclusive topics of interest include: [&hellip;]'>FOCS 2025 CfP is Out</a></li><li><a class='rsswidget' href='https://theorydish.blog/2024/10/15/four-views-of-data-deletion/' title='Where’s the theory on datasets? The canonical model of splitting a dataset into train and test data allows statistical validity for the evaluation of model performance. However, in the real world, there is often not only one source of data to consider but many different sources; the construction and processing of the training set is far from straightforward. [&hellip;]'>Four Views of Data Deletion</a></li><li><a class='rsswidget' href='https://theorydish.blog/2024/10/07/forc-2026-cfp/' title='The 6th annual Symposium on Foundations of Responsible Computing (FORC) will be held on June 4-6, 2025 at Stanford University, CA, USA. Call for papers is out. There are several changes this year (see below) with the most urgent one being that there will be two submission cycles and the first is in about a month. Please send your strong papers for another su [&hellip;]'>FORC 2026 – CFP</a></li><li><a class='rsswidget' href='https://theorydish.blog/2024/07/22/itc-2024-at-stanford-registration-deadline-wednesday-july-24/' title='The conference Information-Theoretic Cryptography (ITC) is happening at Stanford, August 14-16, conveniently just before CRYPTO in Santa Barbara!  There’s a fantastic line-up of talks and speakers, including several “Spotlight” and “Highlights” talks!  You can find the schedule here: https://itcrypto.github.io/2024/2024prog.html Early-bird registration close [&hellip;]'>ITC 2024 at Stanford!  Early-Bird Registration Deadline August 1</a></li><li><a class='rsswidget' href='https://theorydish.blog/2023/12/15/forc-2024-cfp/' title='The 5th annual Symposium on Foundations of Responsible Computing (FORC) will be held on June 12-14, 2024, at Harvard University in Cambridge, MA. Call for papers is out. Please send your strong papers for another success successful instalment of FORC. FORC is a forum for mathematical research in computation and society writ large. The Symposium aims to catal [&hellip;]'>FORC 2024 – CFP</a></li><li><a class='rsswidget' href='https://theorydish.blog/2023/10/30/2024-motwani-postdoc-announced/' title='The theory group at Stanford invites applications for the Motwani postdoctoral fellowship in theoretical computer science. Information and application instructions below. Applications will be accepted until the positions are filled, but review of applicants will begin after Dec 15. Website: https://academicjobsonline.org/ajo/jobs/26450Email: theory.stanford@ [&hellip;]'>2024 Motwani Postdoc Announced</a></li><li><a class='rsswidget' href='https://theorydish.blog/2023/09/25/optimal-metric-distortion-for-voting-a-proof-from-the-book/' title='In this post, we’ll revisit the (deterministic) metric distortion conjecture in voting theory, which was recently proved by Gkatzelis, Halpern, and Shah [GHS20], and elegantly re-proved by Kempe and Kizilkaya [KK22]. The conjecture concerns the following question. Suppose we have an election with voters and candidates who lie in a metric space, but the only [&hellip;]'>Optimal Metric Distortion for Voting — A Proof from the Book</a></li><li><a class='rsswidget' href='https://theorydish.blog/2023/09/05/dnf-minimization-part-ii/' title='In the last post, I discussed the complexity of DNF minimization given a dataset. Specifically, given a dataset of input/output pairs, how hard is it to compute the smallest DNF consistent with ? In this post, we’ll look at a variant of this problem where one requires that the dataset specify a label for every point in . DNF truth table minimization. DNF tru [&hellip;]'>DNF Minimization, Part II</a></li></ul></aside><aside id="block-3" class="widget widget_block widget_text">
+<p></p>
+</aside>	</div><!-- #secondary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+				<div class="site-info-wrapper clear">
+						<div class="site-info">
+				<a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a>
+				
+							</div><!-- .site-info -->
+		</div><!-- .site-info-wrapper -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/files\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/pub\/penscratch-2\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202545924dcd77a86c6f1d3698ec27fc5da92b28585ddad3ee636c0397cf312193b2a1" id="grofiles-cards-js"></script>
+<script type="text/javascript" id="wpgroho-js-extra">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	<div class="grofile-hash-map-ee47e3af6333d8a883d24155e0a6df50">
+	</div>
+	<div class="grofile-hash-map-ee47e3af6333d8a883d24155e0a6df50">
+	</div>
+	<div class="grofile-hash-map-e418880caf740d49314e59c11dbbd4c8">
+	</div>
+	<div class="grofile-hash-map-c530d7fcb76557dbabe703d3a1ed131c">
+	</div>
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-penscratch-2 actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-comment" href="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/#respond">
+							<svg class="gridicon gridicons-comment" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M12 16l-5 5v-5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-7z"/></g></svg>							<span>Comment						</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-reblog" href="">
+							<svg class="gridicon gridicons-reblog" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M22.086 9.914L20 7.828V18c0 1.105-.895 2-2 2h-7v-2h7V7.828l-2.086 2.086L14.5 8.5 19 4l4.5 4.5-1.414 1.414zM6 16.172V6h7V4H6c-1.105 0-2 .895-2 2v10.172l-2.086-2.086L.5 15.5 5 20l4.5-4.5-1.414-1.414L6 16.172z"/></g></svg><span>Reblog</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://windowsontheory.org">
+				<img loading='lazy' alt='' src='https://s0.wp.com/i/logo/wpcom-gray-white.png?m=1479929237i' srcset='https://s0.wp.com/i/logo/wpcom-gray-white.png 1x' class='avatar avatar-50' height='50' width='50' />				Windows On Theory			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 823 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="32349634" />
+										<input type="hidden" name="source" value="https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="1ed603e252" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fwindowsontheory.org%252F2025%252F11%252F04%252Fthoughts-by-a-non-economist-on-ai-and-economics%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://windowsontheory.org">
+				<img loading='lazy' alt='' src='https://s0.wp.com/i/logo/wpcom-gray-white.png?m=1479929237i' srcset='https://s0.wp.com/i/logo/wpcom-gray-white.png 1x' class='avatar avatar-50' height='50' width='50' />				Windows On Theory			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fwindowsontheory.org%252F2025%252F11%252F04%252Fthoughts-by-a-non-economist-on-ai-and-economics%252F">Log in</a></li>
+																<li class="actnbr-shortlink">
+										<a href="https://wp.me/p2bJCi-2iz">
+											<span class="actnbr-shortlink__text">Copy shortlink</span>
+											<span class="actnbr-shortlink__icon"><svg class="gridicon gridicons-checkmark" height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M9 19.414l-6.707-6.707 1.414-1.414L9 16.586 20.293 5.293l1.414 1.414"/></g></svg></span>
+										</a>
+									</li>
+																<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://windowsontheory.org/2025/11/04/thoughts-by-a-non-economist-on-ai-and-economics/" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/blogs/32349634/posts/8839">
+										View post in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+			<div id="jp-carousel-loading-overlay">
+			<div id="jp-carousel-loading-wrapper">
+				<span id="jp-carousel-library-loading">&nbsp;</span>
+			</div>
+		</div>
+		<div class="jp-carousel-overlay" style="display: none;">
+
+		<div class="jp-carousel-container">
+			<!-- The Carousel Swiper -->
+			<div
+				class="jp-carousel-wrap swiper jp-carousel-swiper-container jp-carousel-transitions"
+				itemscope
+				itemtype="https://schema.org/ImageGallery">
+				<div class="jp-carousel swiper-wrapper"></div>
+				<div class="jp-swiper-button-prev swiper-button-prev">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskPrev" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="9" height="12">
+							<path d="M16.2072 16.59L11.6496 12L16.2072 7.41L14.8041 6L8.8335 12L14.8041 18L16.2072 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskPrev)">
+							<rect x="0.579102" width="23.8823" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+				<div class="jp-swiper-button-next swiper-button-next">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskNext" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="8" height="12">
+							<path d="M8.59814 16.59L13.1557 12L8.59814 7.41L10.0012 6L15.9718 12L10.0012 18L8.59814 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskNext)">
+							<rect x="0.34375" width="23.8822" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<!-- The main close buton -->
+			<div class="jp-carousel-close-hint">
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="maskClose" mask-type="alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="15" height="14">
+						<path d="M19.3166 6.41L17.9135 5L12.3509 10.59L6.78834 5L5.38525 6.41L10.9478 12L5.38525 17.59L6.78834 19L12.3509 13.41L17.9135 19L19.3166 17.59L13.754 12L19.3166 6.41Z" fill="white"/>
+					</mask>
+					<g mask="url(#maskClose)">
+						<rect x="0.409668" width="23.8823" height="24" fill="#FFFFFF"/>
+					</g>
+				</svg>
+			</div>
+			<!-- Image info, comments and meta -->
+			<div class="jp-carousel-info">
+				<div class="jp-carousel-info-footer">
+					<div class="jp-carousel-pagination-container">
+						<div class="jp-swiper-pagination swiper-pagination"></div>
+						<div class="jp-carousel-pagination"></div>
+					</div>
+					<div class="jp-carousel-photo-title-container">
+						<h2 class="jp-carousel-photo-caption"></h2>
+					</div>
+					<div class="jp-carousel-photo-icons-container">
+						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="Toggle photo metadata visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskInfo" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12.7537 2C7.26076 2 2.80273 6.48 2.80273 12C2.80273 17.52 7.26076 22 12.7537 22C18.2466 22 22.7046 17.52 22.7046 12C22.7046 6.48 18.2466 2 12.7537 2ZM11.7586 7V9H13.7488V7H11.7586ZM11.7586 11V17H13.7488V11H11.7586ZM4.79292 12C4.79292 16.41 8.36531 20 12.7537 20C17.142 20 20.7144 16.41 20.7144 12C20.7144 7.59 17.142 4 12.7537 4C8.36531 4 4.79292 7.59 4.79292 12Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskInfo)">
+										<rect x="0.8125" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+							</span>
+						</a>
+												<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-comments" aria-label="Toggle photo comments visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskComments" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M4.3271 2H20.2486C21.3432 2 22.2388 2.9 22.2388 4V16C22.2388 17.1 21.3432 18 20.2486 18H6.31729L2.33691 22V4C2.33691 2.9 3.2325 2 4.3271 2ZM6.31729 16H20.2486V4H4.3271V18L6.31729 16Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskComments)">
+										<rect x="0.34668" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+
+								<span class="jp-carousel-has-comments-indicator" aria-label="This image has comments."></span>
+							</span>
+						</a>
+											</div>
+				</div>
+				<div class="jp-carousel-info-extra">
+					<div class="jp-carousel-info-content-wrapper">
+						<div class="jp-carousel-photo-title-container">
+							<h2 class="jp-carousel-photo-title"></h2>
+						</div>
+						<div class="jp-carousel-comments-wrapper">
+															<div id="jp-carousel-comments-loading">
+									<span>Loading Comments...</span>
+								</div>
+								<div class="jp-carousel-comments"></div>
+								<div id="jp-carousel-comment-form-container">
+									<span id="jp-carousel-comment-form-spinner">&nbsp;</span>
+									<div id="jp-carousel-comment-post-results"></div>
+																														<form id="jp-carousel-comment-form">
+												<label for="jp-carousel-comment-form-comment-field" class="screen-reader-text">Write a Comment...</label>
+												<textarea
+													name="comment"
+													class="jp-carousel-comment-form-field jp-carousel-comment-form-textarea"
+													id="jp-carousel-comment-form-comment-field"
+													placeholder="Write a Comment..."
+												></textarea>
+												<div id="jp-carousel-comment-form-submit-and-info-wrapper">
+													<div id="jp-carousel-comment-form-commenting-as">
+																													<fieldset>
+																<label for="jp-carousel-comment-form-email-field">Email (Required)</label>
+																<input type="text" name="email" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-email-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-author-field">Name (Required)</label>
+																<input type="text" name="author" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-author-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-url-field">Website</label>
+																<input type="text" name="url" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-url-field" />
+															</fieldset>
+																											</div>
+													<input
+														type="submit"
+														name="submit"
+														class="jp-carousel-comment-form-button"
+														id="jp-carousel-comment-form-button-submit"
+														value="Post Comment" />
+												</div>
+											</form>
+																											</div>
+													</div>
+						<div class="jp-carousel-image-meta">
+							<div class="jp-carousel-title-and-caption">
+								<div class="jp-carousel-photo-info">
+									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+								</div>
+
+								<div class="jp-carousel-photo-description"></div>
+							</div>
+							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
+							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
+									</mask>
+									<g mask="url(#mask0)">
+										<rect x="0.870605" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+								<span class="jp-carousel-download-text"></span>
+							</a>
+							<div class="jp-carousel-image-map" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>
+		
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https:\/\/windowsontheory.org\/2025\/11\/04\/thoughts-by-a-non-economist-on-ai-and-economics\/":8839};
+	</script>
+				<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-2' href='/_static/??-eJydjtsKg0AMRH+oGqy00ofSTykag0R3N8FkEf++ll6gb23fZobDYWDRAiU5JYeYCw154GQwkmuL07NDFElw5YTQBcHJwBZWmks028H3hih9DmSA7SzZKLyh1/Cr8HEpc+jBcmc4szrLBn+0MnL69+rC/UBu4KKFim3JfA10113iuWoO9ak51tV+vAFFyXy4&cssminify=yes' type='text/css' media='all' />
+<script type="text/javascript" id="verbum-settings-js-before">
+/* <![CDATA[ */
+window.VerbumComments = {"Log in or provide your name and email to leave a reply.":"Log in or provide your name and email to leave a reply.","Log in or provide your name and email to leave a comment.":"Log in or provide your name and email to leave a comment.","Receive web and mobile notifications for posts on this site.":"Receive web and mobile notifications for posts on this site.","Name":"Name","Email (address never made public)":"Email (address never made public)","Website (optional)":"Website (optional)","Leave a reply. (log in optional)":"Leave a reply. (log in optional)","Leave a comment. (log in optional)":"Leave a comment. (log in optional)","Log in to leave a reply.":"Log in to leave a reply.","Log in to leave a comment.":"Log in to leave a comment.","Logged in via %s":"Logged in via %s","Log out":"Log out","Email":"Email","(Address never made public)":"(Address never made public)","Instantly":"Instantly","Daily":"Daily","Reply":"Reply","Comment":"Comment","WordPress":"WordPress","Weekly":"Weekly","Notify me of new posts":"Notify me of new posts","Email me new posts":"Email me new posts","Email me new comments":"Email me new comments","Cancel":"Cancel","Write a comment...":"Write a comment...","Write a reply...":"Write a reply...","Website":"Website","Optional":"Optional","We'll keep you in the loop!":"We'll keep you in the loop!","Loading your comment...":"Loading your comment...","Discover more from":"Discover more from Windows On Theory","Subscribe now to keep reading and get access to the full archive.":"Subscribe now to keep reading and get access to the full archive.","Continue reading":"Continue reading","Never miss a beat!":"Never miss a beat!","Interested in getting blog post updates? Simply click the button below to stay in the loop!":"Interested in getting blog post updates? Simply click the button below to stay in the loop!","Enter your email address":"Enter your email address","Subscribe":"Subscribe","Comment sent successfully":"Comment sent successfully","Save my name, email, and website in this browser for the next time I comment.":"Save my name, email, and website in this browser for the next time I comment.","hovercardi18n":{"Edit your profile \u2192":"Edit your profile \u2192","View profile \u2192":"View profile \u2192","Contact":"Contact","Send money":"Send money","Profile not found.":"Profile not found.","Too Many Requests.":"Too Many Requests.","Internal Server Error.":"Internal Server Error.","Sorry, we are unable to load this Gravatar profile.":"Sorry, we are unable to load this Gravatar profile."},"siteId":32349634,"postId":8839,"mustLogIn":false,"requireNameEmail":true,"commentRegistration":false,"connectURL":"https:\/\/windowsontheory.wordpress.com\/public.api\/connect\/?action=request&domain=windowsontheory.org","logoutURL":"https:\/\/windowsontheory.wordpress.com\/wp-login.php?action=logout&_wpnonce=2eafe8b355","homeURL":"https:\/\/windowsontheory.org\/","subscribeToBlog":true,"subscribeToComment":true,"isJetpackCommentsLoggedIn":false,"jetpackUsername":"","jetpackUserId":0,"jetpackSignature":"","jetpackAvatar":"https:\/\/0.gravatar.com\/avatar\/?s=96&amp;d=identicon&amp;r=G","enableBlocks":true,"enableSubscriptionModal":true,"currentLocale":"en","isJetpackComments":false,"allowedBlocks":["core\/paragraph","core\/list","core\/code","core\/list-item","core\/quote","core\/image","core\/embed","core\/quote","core\/code"],"embedNonce":"a9debd919e","verbumBundleUrl":"\/wp-content\/mu-plugins\/jetpack-mu-wpcom-plugin\/moon\/jetpack_vendor\/automattic\/jetpack-mu-wpcom\/src\/features\/verbum-comments\/dist\/index.js","isRTL":false,"vbeCacheBuster":1738686361,"iframeUniqueId":0,"colorScheme":false}
+/* ]]> */
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/likes/queuehandler.js?m=1741961244i'></script>
+<script type="text/javascript" src="/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/moon/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/assets/dynamic-loader.js?m=1755005491i&amp;minify=false&amp;ver=adc3e7b923a66edb437b" id="verbum-dynamic-loader-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" id="coblocks-loader-js-extra">
+/* <![CDATA[ */
+var wpcom_coblocks_js = {"coblocks_masonry_js":"https:\/\/s0.wp.com\/wp-content\/plugins\/coblocks\/2.18.1-simple-rev.4\/dist\/js\/coblocks-masonry.min.js","coblocks_lightbox_js":"https:\/\/s0.wp.com\/wp-content\/plugins\/coblocks\/2.18.1-simple-rev.4\/dist\/js\/coblocks-lightbox.min.js","jquery_core_js":"\/wp-includes\/js\/jquery\/jquery.min.js","jquery_migrate_js":"\/wp-includes\/js\/jquery\/jquery-migrate.min.js","masonry_js":"\/wp-includes\/js\/masonry.min.js","imagesloaded_js":"\/wp-includes\/js\/imagesloaded.min.js"};
+var coblocksLigthboxData = {"closeLabel":"Close Gallery","leftLabel":"Previous","rightLabel":"Next"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="jetpack-carousel-js-extra">
+/* <![CDATA[ */
+var jetpackSwiperLibraryPath = {"url":"\/wp-content\/mu-plugins\/jetpack-plugin\/moon\/_inc\/blocks\/swiper.js"};
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https:\/\/windowsontheory.org\/wp-admin\/admin-ajax.php","nonce":"ac57b1b3f7","display_exif":"1","display_comments":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","image_label":"Open image in full-screen.","download_original":"View full size <span class=\"photo-size\">{0}<span class=\"photo-size-times\">\u00d7<\/span>{1}<\/span>","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"https:\/\/windowsontheory.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fwindowsontheory.org%2F2025%2F11%2F04%2Fthoughts-by-a-non-economist-on-ai-and-economics%2F","blog_id":"32349634","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"stats_query_args":"blog=32349634&v=wpcom&tz=-4&user_id=0&subd=windowsontheory","is_public":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="sharing-js-js-extra">
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="jetpack-script-data-js-before">
+/* <![CDATA[ */
+window.JetpackScriptData = {"site":{"host":"wpcom","is_wpcom_platform":true}};
+/* ]]> */
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJydkOtSAjEMhV/Ibl1ULj8cHoXJtgGy29s0KcjbW4HFHcdR8V9zku+kJ/qYlIlBMIhOruwosDaxc9EMrGdNu2xaxeSTQ5Xx0DxrSyy6/xxSLoLF3HgKTc8PeuIne/TIOpVOJwxsMojZq9kHHeBAOxCK90DT+g6MB0rKURjUNprCaktvI03BuGIrdw7kfXWqMZM7fRfHFzVeqEdJYAZVpWOq4LWhfYxhbG4OGGzMGopEDyJkbhgwo7DuCjl7E+ufKYmyIPCHzdOFmxrjamYgx8LobnOj8EsgGIg9inpqHi92o7DN52H7AzuuuJziS/n/KLyHjBasPZ2fFHbXDGv/2i7m7XK1WrzM+3fjoQYf'></script>
+<script type="text/javascript" id="sharing-js-js-after">
+/* <![CDATA[ */
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-twitter' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-twitter' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+						return false;
+					}
+				} );
+			} )();
+/* ]]> */
+</script>
+
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+	<iframe src='https://widgets.wp.com/likes/master.html?ver=20251106#ver=20251106' scrolling='no' id='likes-master' name='likes-master' style='display:none;'></iframe>
+	<div id='likes-other-gravatars' role="dialog" aria-hidden="true" tabindex="-1"><div class="likes-text"><span>%d</span></div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+	<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'32349634','blog_tz':'-4','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view', {'blog':'32349634','v':'wpcom','tz':'-4','user_id':'0','post':'8839','subd':'windowsontheory'}]);
+_stq.push(['extra', {'crypt':'UE5tW3cvZGRDbzJxMWx6aVlydldVeXIvdUpWanJmOVg4Mys2XWxoN19+Lk5YJUp6QyVxQW02Q0lDM1lFMHBvZkEwd0d2V2lbajN2NWhmaHc5SkxqRjdkUSVlaEt+ei84V3Y1ajU/TXR8eVgmZmJbJXJZVGl6aEVDbGE0dFBrRnNlZ050cVpkc245UGw0RVhaT1ZLc1hqcH5oSmlVSmVoL0hmSFFGeG1EejZILUlla2lCRkMtYVBBcmVsNjN8P295Ty5XVjQmS05janl8alVSRGxbQVQyZz80MmY4JUxHWzFwdT0mL3RHMHZ0LjFrX2NyXzVFdGRxMlgvPyUwP0VWWFFNW25CLlVBVXg='}]);
+_stq.push([ 'clickTrackerInit', '32349634', '8839' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="America/New_York" data-custom-props="{&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/penscratch-2&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202545"></script> 	
+<script>
+(function() {
+	'use strict';
+
+	const fetches = {};
+	const promises = {};
+	const urls = {
+		'wp-polyfill': '/wp-includes/js/dist/vendor/wp-polyfill.min.js?m=1744646400i&ver=3.15.0',
+		'verbum': '/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/moon/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.js?m=1758190933i&minify=false&ver=8cc495904506e2a8485f'
+	};
+	const loaders = {
+		'verbum': () => {
+			fetchExternalScript('wp-polyfill');
+			fetchExternalScript('verbum');
+			promises['wp-polyfill'] = promises['wp-polyfill'] || loadWPScript('wp-polyfill');
+			promises['verbum'] = promises['verbum'] || promises['wp-polyfill'].then( () => loadWPScript('verbum') );
+			return promises['verbum'];
+		},
+		
+	};
+	const scriptExtras = {
+		
+	};
+
+	window.WP_Enqueue_Dynamic_Script = {
+		loadScript: (handle) => {
+			if (!loaders[handle]) {
+				console.error('WP_Enqueue_Dynamic_Script: unregistered script `' + handle + '`.');
+			}
+			return loaders[handle]();
+		}
+	};
+
+	function fetchExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		fetches[handle] = fetches[handle] || fetch(urls[handle], { mode: 'no-cors' });
+		return fetches[handle];
+	}
+
+	function runExtraScript(handle, type, index) {
+		const id = 'wp-enqueue-dynamic-script:' + handle + ':' + type + ':' + (index + 1);
+		const template = document.getElementById(id);
+		if (!template) {
+			return Promise.reject();
+		}
+
+		const script = document.createElement( 'script' );
+		script.innerHTML = template.innerHTML;
+		document.body.appendChild( script );
+		return Promise.resolve();
+	}
+
+	function loadExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		return fetches[handle].then(() => {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.onload = () => resolve();
+				script.onerror = (e) => reject(e);
+				script.src = urls[handle];
+				document.body.appendChild(script);
+			});
+		});
+	}
+
+	function loadExtra(handle, pos) {
+		const count = (scriptExtras[handle] && scriptExtras[handle][pos]) || 0;
+		let promise = Promise.resolve();
+
+		for (let i = 0; i < count; i++) {
+			promise = promise.then(() => runExtraScript(handle, pos, i));
+		}
+
+		return promise;
+	}
+
+	function loadWPScript(handle) {
+		// Core loads scripts in this order. See: https://github.com/WordPress/WordPress/blob/a59eb9d39c4fcba834b70c9e8dfd64feeec10ba6/wp-includes/class-wp-scripts.php#L428.
+		return loadExtra(handle, 'translations')
+			.then(() => loadExtra(handle, 'before'))
+			.then(() => loadExternalScript(handle))
+			.then(() => loadExtra(handle, 'after'));
+	}
+} )();
+</script>
+
+</body>
+</html>
