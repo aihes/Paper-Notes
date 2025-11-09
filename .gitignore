@@ -82,3 +82,9 @@ typestubs/
 
 # macOS
 .DS_Store
+
+# Playwright user data
+/playwright_user_data
+
+# Local scripts
+send_x.sh
