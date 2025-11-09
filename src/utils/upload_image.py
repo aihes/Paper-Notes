@@ -22,7 +22,7 @@ def upload_image_from_base64(base64_string, filename):
     if not api_url or not api_key:
         raise ValueError("XHS_API_URL and XHS_API_KEY must be set in the .env file")
 
-    endpoint = f"{api_url}/api/images/upload-base64"
+    endpoint = urljoin(api_url, "/api/images/upload-base64")
     
     headers = {
         "X-API-Key": api_key,
