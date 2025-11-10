@@ -175,10 +175,12 @@ def main():
             print_warning(f"账号 '{args.account}' 没有预设配置，不使用默认标签")
         
         # 3. 发布
+        print_info("发布时禁用封面生成")
         result = publish_to_xiaohongshu(
             content=content,
             account=args.account,
-            tags=tags
+            tags=tags,
+            enable_cover=False
         )
         
         # 4. 显示结果
