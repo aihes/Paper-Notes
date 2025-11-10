@@ -88,3 +88,6 @@ typestubs/
 
 # Local scripts
 send_x.sh
+
+# Generated content
+x_content/

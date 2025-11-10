@@ -66,8 +66,17 @@ def publish_to_twitter(account: str, text: str, images: list[str]):
         response = requests.post(endpoint, headers=headers, json=data)
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         
+        response_data = response.json()
         print("Successfully published to Twitter.")
-        print("Response:", response.json())
+        print("Response:", response_data)
+
+        # Construct and print the screenshot URL
+        task_id = response_data.get("task_id")
+        if task_id and api_url:
+            screenshot_path = f"screenshots?taskId={task_id}"
+            screenshot_url = urljoin(api_url, screenshot_path)
+            print(f"Screenshot URL: {screenshot_url}")
+
         return response
 
     except requests.exceptions.RequestException as e:
