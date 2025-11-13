@@ -91,3 +91,6 @@ send_x.sh
 
 # Generated content
 x_content/
+
+# Folder for external code repositories
+code_repositories/

@@ -73,3 +73,5 @@
     -   内容应精炼、引人入胜，可采用多段（Thread）形式。
     -   **注意**：内容为纯文本，不使用 Markdown 格式。
     -   将最终内容保存为 `twitter_post.txt`，与 `README.md` 存放在同一目录下。
+    - 注意这个twitter_post里面不用MArkdown，因为Twitter不支持MArkdown格式的，普通格式就行，还有我们可以发长文；
+    - 在Twitter的内容最后加上原文的引用，方便用户自己去原文查看
