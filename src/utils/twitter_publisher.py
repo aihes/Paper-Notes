@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import base64
 import mimetypes
 from urllib.parse import urljoin
+import markdown
+from bs4 import BeautifulSoup
 
 # Add project root to Python path
 project_root = Path(__file__).resolve().parent.parent.parent
@@ -15,6 +17,19 @@ sys.path.append(str(project_root))
 from src.utils.upload_image import upload_image_from_base64
 from src.utils.image_processor import resize_image_if_needed
 
+
+def convert_markdown_to_plain_text(md_text: str) -> str:
+    """
+    Converts a Markdown string to plain text.
+    """
+    # Convert Markdown to HTML
+    html = markdown.markdown(md_text)
+    
+    # Parse HTML and extract text
+    soup = BeautifulSoup(html, "html.parser")
+    plain_text = soup.get_text()
+    
+    return plain_text
 
 def publish_to_twitter(account: str, text: str, images: list[str]):
     """
@@ -44,9 +59,12 @@ def publish_to_twitter(account: str, text: str, images: list[str]):
         "Content-Type": "application/json"
     }
 
+    # Convert text from Markdown to plain text
+    plain_text = convert_markdown_to_plain_text(text)
+
     data = {
         "account": account,
-        "text": text,
+        "text": plain_text,
         "images": images if images else []
     }
 
