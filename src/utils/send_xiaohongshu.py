@@ -40,23 +40,19 @@ INPUT_FILE_PATH = project_root / "x_content" / "twitter_post.txt"
 ACCOUNT_PRESETS = {
     "he": {
         "account_type": "default",
-        "watermark": "@AI贺",
-        "default_tags": "分享,干货"
+        "watermark": "@AI贺"
     },
     "eric": {
         "account_type": "product_manager",
-        "watermark": "@Eric.AI",
-        "default_tags": "产品经理,职场"
+        "watermark": "@Eric.AI"
     },
     "conrad": {
         "account_type": "default",
-        "watermark": "@Conrad",
-        "default_tags": "分享,学习"
+        "watermark": "@Conrad"
     },
     "aihe": {
         "account_type": "default",
-        "watermark": "@AI贺",
-        "default_tags": "AI,技术"
+        "watermark": "@AI贺"
     }
 }
 
@@ -105,7 +101,6 @@ def publish_to_xiaohongshu(
     content: str,
     account: str,
     title: Optional[str] = None,
-    tags: Optional[str] = None,
     enable_cover: bool = True,
     content_images: Optional[list[str]] = None
 ) -> dict:
@@ -123,8 +118,6 @@ def publish_to_xiaohongshu(
     
     if title:
         data["title"] = title
-    if tags:
-        data["tags"] = tags
     if content_images:
         data["content_images"] = content_images
     
@@ -175,12 +168,8 @@ def main():
         
         # 2. 获取账号预设
         account_preset = ACCOUNT_PRESETS.get(args.account.lower())
-        tags = None
         if account_preset:
             print_info(f"使用预设账号配置: {args.account}")
-            tags = account_preset.get('default_tags')
-            if tags:
-                print_info(f"使用预设标签: {tags}")
         else:
             print_warning(f"账号 '{args.account}' 没有预设配置，不使用默认标签")
         
@@ -203,7 +192,6 @@ def main():
         result = publish_to_xiaohongshu(
             content=content,
             account=args.account,
-            tags=tags,
             enable_cover=False,
             content_images=image_urls
         )

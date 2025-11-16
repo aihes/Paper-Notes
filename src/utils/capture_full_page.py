@@ -177,8 +177,8 @@ async def main():
     parser.add_argument(
         "-w", "--width",
         type=int,
-        default=800,
-        help="浏览器视口宽度 (默认: 800px)"
+        default=750,
+        help="浏览器视口宽度 (默认: 750px)"
     )
     parser.add_argument(
         "-l", "--limit",

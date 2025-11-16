@@ -16,6 +16,7 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+from urllib.parse import urljoin
 
 # --- 设置项目根目录 ---
 project_root = Path(__file__).resolve().parent.parent.parent
@@ -24,7 +25,7 @@ sys.path.append(str(project_root))
 # --- 导入项目内模块 ---
 from src.utils.capture_full_page import capture_full_page
 from src.utils.upload_image import image_path_to_base64_uri, upload_image_from_base64
-from src.utils.send_xiaohongshu import publish_to_xiaohongshu, ACCOUNT_PRESETS
+from src.utils.send_xiaohongshu import publish_to_xiaohongshu, ACCOUNT_PRESETS, REMOTE_API_URL
 
 # ============================================================================
 # 配置
@@ -118,20 +119,10 @@ async def run_local_capture_and_publish(url: str, account: str, width: int, limi
         # --- 步骤 3: 发布内容 ---
         print_step("步骤 3/3: 正在发布内容到小红书...")
 
-        # 获取账号预设标签
-        account_preset = ACCOUNT_PRESETS.get(account.lower())
-        tags = None
-        if account_preset:
-            tags = account_preset.get('default_tags')
-            print_info(f"使用预设账号 '{account}' 的标签: {tags}")
-        else:
-            print_warning(f"账号 '{account}' 没有预设配置，不使用默认标签。")
-        
         # 执行发布
         publish_result = publish_to_xiaohongshu(
             content=text_content,
             account=account,
-            tags=tags,
             enable_cover=False,  # 根据业务逻辑，这里通常不需要再生成封面
             content_images=uploaded_image_urls
         )
@@ -139,6 +130,13 @@ async def run_local_capture_and_publish(url: str, account: str, width: int, limi
         print_success("发布请求已发送！")
         print_info("服务器响应:")
         print(json.dumps(publish_result, ensure_ascii=False, indent=2))
+
+        # 拼接并打印任务链接
+        task_id = publish_result.get('task_id')
+        if task_id and REMOTE_API_URL:
+            screenshot_path = f"screenshots?taskId={task_id}"
+            screenshot_url = urljoin(REMOTE_API_URL, screenshot_path)
+            print_info(f"任务状态链接: {screenshot_url}")
 
     except Exception as e:
         print_error(f"工作流执行失败: {e}")
@@ -156,7 +154,7 @@ async def main():
     )
     parser.add_argument('--url', '-u', required=True, help='需要截图和发布的URL')
     parser.add_argument('--account', '-a', required=True, help=f'发布账号 (可选: {", ".join(ACCOUNT_PRESETS.keys())})')
-    parser.add_argument('--width', '-w', type=int, default=800, help='截图宽度 (默认: 800)')
+    parser.add_argument('--width', '-w', type=int, default=750, help='截图宽度 (默认: 750)')
     parser.add_argument('--limit', '-l', type=int, default=10, help='最大截图数量 (0为不限制, 默认: 10)')
     
     args = parser.parse_args()

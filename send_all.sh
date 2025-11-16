@@ -4,11 +4,13 @@ set -e
 # 1. 检查参数
 if [ -z "$1" ]; then
   echo "错误：请提供源目录作为第一个参数。"
-  echo "用法: ./send_all.sh <path_to_source_directory>"
+  echo "用法: ./send_all.sh <path_to_source_directory> [platform]"
+  echo "平台可以是 'x', 'xiaohongshu', 或留空以发布到所有平台。"
   exit 1
 fi
 
 SOURCE_DIR=$1
+PLATFORM=$2
 TEMP_CONTENT_DIR="./x_content"
 TEXT_FILE="$TEMP_CONTENT_DIR/twitter_post.txt"
 IMAGE_DIR="$TEMP_CONTENT_DIR/images"
@@ -47,26 +49,32 @@ else
 fi
 
 # 5. 发布到 X (Twitter)
-echo "--- 3. 发布到 X (Twitter) ---"
-./send_x.sh "$TEXT_FILE" "$IMAGE_URLS_FILE"
-if [ $? -ne 0 ]; then
-  echo "错误：发布到 X (Twitter) 失败。"
-  exit 1
+# 5. 根据平台参数发布
+if [ -z "$PLATFORM" ] || [ "$PLATFORM" = "x" ]; then
+  echo "--- 3. 发布到 X (Twitter) ---"
+  ./send_x.sh "$TEXT_FILE" "$IMAGE_URLS_FILE"
+  if [ $? -ne 0 ]; then
+    echo "错误：发布到 X (Twitter) 失败。"
+    exit 1
+  fi
+  echo "X (Twitter) 发布成功。"
 fi
-echo "X (Twitter) 发布成功。"
 
-# 等待10秒
-echo "等待 10 秒..."
-sleep 10
-
-# 6. 发布到小红书
-echo "--- 4. 发布到小红书 ---"
-./send_xiaohongshu.sh "$TEXT_FILE" "$IMAGE_URLS_FILE"
-if [ $? -ne 0 ]; then
-  echo "错误：发布到小红书失败。"
-  exit 1
+if [ -z "$PLATFORM" ]; then
+  # 如果是全平台发布，则在平台之间等待
+  echo "等待 10 秒..."
+  sleep 10
 fi
-echo "小红书发布成功。"
+
+if [ -z "$PLATFORM" ] || [ "$PLATFORM" = "xiaohongshu" ]; then
+  echo "--- 4. 发布到小红书 ---"
+  ./send_xiaohongshu.sh "$TEXT_FILE" "$IMAGE_URLS_FILE"
+  if [ $? -ne 0 ]; then
+    echo "错误：发布到小红书失败。"
+    exit 1
+  fi
+  echo "小红书发布成功。"
+fi
 
 echo "---"
 echo "所有平台的发布任务均已成功完成！"

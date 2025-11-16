@@ -102,7 +102,7 @@ def main():
     parser = argparse.ArgumentParser(description="远程截图并发布工具")
     parser.add_argument('--url', '-u', required=True, help='需要截图的URL')
     parser.add_argument('--account', '-a', required=True, help='账号名称')
-    parser.add_argument('--width', '-w', type=int, default=800, help='截图宽度，默认为 800')
+    parser.add_argument('--width', '-w', type=int, default=750, help='截图宽度，默认为 750')
     parser.add_argument('--limit', '-l', type=int, default=5, help='图片数量限制，默认为 5')
     
     args = parser.parse_args()

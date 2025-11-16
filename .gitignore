@@ -86,8 +86,6 @@ typestubs/
 # Playwright user data
 /playwright_user_data
 
-# Local scripts
-send_x.sh
 
 # Generated content
 x_content/
