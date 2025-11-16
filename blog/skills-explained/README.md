@@ -1,6 +1,6 @@
 # Agent Skills 深度解析：Anthropic 如何通过模块化生态定义下一代 AI 代理
 
-> 本文是对 Anthropic 官方博客文章 [Skills explained](https://www.claude.com/blog/skills-explained) 的深度解读，并结合社区反馈和技术细节，提供一份全面的分析报告。
+> 本文是对 Anthropic 官方博客文章 [Skills explained](https://www.claude.com/blog/skills-explained) 的解读，结合社区反馈和技术细节，提供一份全面的分析报告。
 
 ## 一句话总结 (TL;DR)
 
@@ -166,19 +166,10 @@ Agent Skills 不仅仅是一项新功能，它代表了 AI 代理开发范式的
 随着 Skills 生态的不断成熟，我们可以预见：
 *   **非开发者的大量涌入**：更多领域专家将能亲手构建满足其专业需求的 AI 工具。
 *   **AI 能力市场的形成**：一个围绕 Skills 创建、分享和交易的繁荣市场有望出现。
-*   **“振动编码”（Vibe Coding）的基石**：结合 Subagents 和 MCP，Skills 将成为未来“意图驱动”编程的基础，开发者只需描述“做什么”，而 AI 将自动组织“如何做”。
+*   **Vibe Codind的基石**：结合 Subagents 和 MCP，Skills 将成为未来“意图驱动”编程的基础，开发者只需描述“做什么”，而 AI 将自动组织“如何做”。
 
 对于任何希望在 AI 时代保持领先的开发者和组织而言，理解并掌握 Agent Skills 都将是一项至关重要的核心竞争力。
 
-## 附录：核心术语解释 (Glossary)
-
-*   **Skills**: 一种标准化的能力单元，将特定的指令、代码和资源打包在一起，使Claude能够按需加载和执行，从而高效、一致地完成重复性或专业性任务。
-*   **Prompts**: 用户在与Claude的对话中输入的临时性、一次性的自然语言指令，用于驱动当前的交互。
-*   **Projects**: 一个持久化的工作空间，包含独立的聊天历史和知识库（最高200K上下文，支持RAG扩展）。它为特定项目的所有相关对话提供统一的背景信息。
-*   **Subagents**: 在Claude Code和Agent SDK中可用的专用AI助手，拥有独立的上下文、系统提示和工具权限。它们被主代理（Main Agent）用于处理离散、专业的子任务。
-*   **Model Context Protocol (MCP)**: 一个开放的标准协议，旨在为AI模型与外部系统（如数据库、API、文件系统）之间建立一个通用的、安全的连接层，解决AI的“最后一公里”数据接入问题。
-*   **Progressive Disclosure (渐进式披露)**: 一种信息加载策略，即先加载少量关键信息（如元数据），在确认相关性后，再加载更详细的内容。Skills使用此策略来节省上下文空间。
-*   **Retrieval Augmented Generation (RAG)**: 一种结合了信息检索（Retrieval）和文本生成（Generation）的技术。当查询超出模型内部知识范围时，系统会先从外部知识库中检索相关信息，然后将其作为上下文喂给模型，以生成更准确、更丰富的回答。
 
 ## 外部资源与参考实现
 
