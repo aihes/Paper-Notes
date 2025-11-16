@@ -106,7 +106,8 @@ def publish_to_xiaohongshu(
     account: str,
     title: Optional[str] = None,
     tags: Optional[str] = None,
-    enable_cover: bool = True
+    enable_cover: bool = True,
+    content_images: Optional[list[str]] = None
 ) -> dict:
     """发布内容到小红书远程服务器"""
     if not REMOTE_API_URL or not API_KEY:
@@ -124,6 +125,8 @@ def publish_to_xiaohongshu(
         data["title"] = title
     if tags:
         data["tags"] = tags
+    if content_images:
+        data["content_images"] = content_images
     
     headers = {
         "Content-Type": "application/json",
@@ -150,6 +153,8 @@ def main():
     """主函数"""
     parser = argparse.ArgumentParser(description="小红书远程发布工具 (Refactored)")
     parser.add_argument('--account', '-a', required=True, help='账号名称 (例如: eric, he, conrad, aihe)')
+    parser.add_argument('--input-file', '-i', help='可选：指定要发布的文本文件路径')
+    parser.add_argument('--image-urls-file', type=str, help='可选：包含图片 URL 的文件路径，每行一个')
     
     args = parser.parse_args()
     
@@ -158,9 +163,14 @@ def main():
     print("=" * 70 + "\n")
     
     try:
-        # 1. 读取固定文件
-        print_info(f"读取输入文件: {INPUT_FILE_PATH}")
-        content = read_input_file(INPUT_FILE_PATH)
+        # 1. 确定并读取输入文件
+        if args.input_file:
+            input_file = Path(args.input_file)
+        else:
+            input_file = INPUT_FILE_PATH
+        
+        print_info(f"读取输入文件: {input_file}")
+        content = read_input_file(input_file)
         print_success(f"成功读取文件，内容长度: {len(content)} 字符")
         
         # 2. 获取账号预设
@@ -174,13 +184,28 @@ def main():
         else:
             print_warning(f"账号 '{args.account}' 没有预设配置，不使用默认标签")
         
-        # 3. 发布
+        # 3. 读取图片链接
+        image_urls = []
+        if args.image_urls_file:
+            try:
+                with open(args.image_urls_file, 'r', encoding='utf-8') as f:
+                    image_urls = [line.strip() for line in f if line.strip()]
+                if image_urls:
+                    print_info(f"加载了 {len(image_urls)} 个图片链接 (from {args.image_urls_file})")
+            except FileNotFoundError:
+                print_warning(f"图片链接文件未找到: {args.image_urls_file}。将无图发布。")
+            except Exception as e:
+                print_error(f"读取图片链接文件失败: {e}")
+                sys.exit(1)
+
+        # 4. 发布
         print_info("发布时禁用封面生成")
         result = publish_to_xiaohongshu(
             content=content,
             account=args.account,
             tags=tags,
-            enable_cover=False
+            enable_cover=False,
+            content_images=image_urls
         )
         
         # 4. 显示结果
