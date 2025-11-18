@@ -62,8 +62,8 @@ fi
 
 if [ -z "$PLATFORM" ]; then
   # 如果是全平台发布，则在平台之间等待
-  echo "等待 10 秒..."
-  sleep 10
+  echo "等待 30 秒..."
+  sleep 30
 fi
 
 if [ -z "$PLATFORM" ] || [ "$PLATFORM" = "xiaohongshu" ]; then
