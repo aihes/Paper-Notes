@@ -68,11 +68,16 @@ async def capture_full_page(url: str, output_base_dir: str, width: int, limit: i
             
             logs.append(f"🔗 正在打开页面: {url}")
             
-            # 使用更灵活的加载策略
-            # 使用更健壮的 networkidle 策略，等待网络活动基本停止
-            logs.append("   ⏳ 正在等待网络空闲(networkidle)，最长等待90秒...")
-            await page.goto(url, wait_until="networkidle", timeout=90000)
-            logs.append("   ✅ 页面网络活动已稳定。")
+            # 根据URL类型选择合适的加载策略
+            if url.startswith("file://"):
+                wait_strategy = "load"
+                logs.append(f"   ⏳ 检测到本地文件，等待页面加载完成 (load)...")
+            else:
+                wait_strategy = "networkidle"
+                logs.append(f"   ⏳ 正在等待网络空闲 (networkidle)，最长等待90秒...")
+
+            await page.goto(url, wait_until=wait_strategy, timeout=90000)
+            logs.append("   ✅ 页面加载完成。")
 
         except PlaywrightTimeoutError as e:
             logs.append(f"⚠️  警告：页面加载在90秒内未完全空闲，但仍将继续尝试截图。错误: {e}")
@@ -196,7 +201,21 @@ async def main():
         project_root = Path(__file__).resolve().parent.parent
         output_base_dir = project_root / "logs"
 
-    result = await capture_full_page(args.url, str(output_base_dir), args.width, args.limit)
+    # 检查URL是本地文件还是网页
+    url_input = args.url
+    if not (url_input.startswith('http://') or url_input.startswith('https://')):
+        file_path = Path(url_input)
+        if file_path.is_file():
+            # 将本地文件路径转换为 file:// URI
+            url_to_capture = file_path.resolve().as_uri()
+            print(f"🔍 检测到本地文件，将使用 URI: {url_to_capture}")
+        else:
+            print(f"❌ 错误: '{url_input}' 既不是有效的 URL 也不是存在的文件路径。")
+            sys.exit(1)
+    else:
+        url_to_capture = url_input
+
+    result = await capture_full_page(url_to_capture, str(output_base_dir), args.width, args.limit)
 
     # 打印脚本执行的日志
     for log_message in result.get("logs", []):

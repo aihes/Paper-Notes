@@ -92,4 +92,7 @@ x_content/
 
 # Folder for external code repositories
 code_repositories/
+code_repositories/*
 logs/
+.roo/
+code_repositories/todo-app
