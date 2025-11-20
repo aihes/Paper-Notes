@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户价值象限图：能力 vs 意愿</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .quadrant-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 90vw;
+            max-width: 800px;
+            height: 80vh;
+            max-height: 600px;
+            gap: 10px;
+            position: relative;
+            background-color: #ddd;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* 坐标轴标签 */
+        .axis-label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #555;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 4px;
+            z-index: 10;
+        }
+        .top-label { top: -40px; left: 50%; transform: translateX(-50%); }
+        .bottom-label { bottom: -40px; left: 50%; transform: translateX(-50%); }
+        .left-label { left: -100px; top: 50%; transform: translateY(-50%); width: 80px; text-align: right;}
+        .right-label { right: -100px; top: 50%; transform: translateY(-50%); width: 80px; }
+
+        /* 象限卡片通用样式 */
+        .quadrant {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quadrant:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 5;
+        }
+
+        .q-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .q-desc {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .q-action {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* 个性化样式 */
+        
+        /* Q1: 有钱 + 愿意花 */
+        .q1 {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 2px solid #2ecc71;
+            background-color: #e8f8f5;
+        }
+        .q1 .q-title { color: #27ae60; }
+        .q1 .q-action { background-color: #2ecc71; color: white; }
+
+        /* Q2: 没钱 + 愿意花 */
+        .q2 {
+            background-color: #fff8e1;
+            border: 2px solid #f1c40f;
+        }
+        .q2 .q-title { color: #d35400; }
+        .q2 .q-action { background-color: #f1c40f; color: #333; }
+
+        /* Q3: 有钱 + 不愿意花 */
+        .q3 {
+            background-color: #e3f2fd;
+            border: 2px solid #3498db;
+        }
+        .q3 .q-title { color: #2980b9; }
+        .q3 .q-action { background-color: #3498db; color: white; }
+
+        /* Q4: 没钱 + 不愿意花 */
+        .q4 {
+            background-color: #f5f5f5;
+            border: 2px solid #95a5a6;
+            color: #7f8c8d;
+        }
+        .q4 .q-title { color: #7f8c8d; }
+        .q4 .q-action { background-color: #95a5a6; color: white; }
+
+        /* 布局微调 (Grid Area) */
+        /* Grid layout: 
+           [有钱+不愿] [有钱+愿]
+           [没钱+不愿] [没钱+愿]
+           注意：通常横轴右侧是高，纵轴上方是高。
+           所以：
+           右上 = Q1 (有钱+愿)
+           右下 = Q2 (没钱+愿)
+           左上 = Q3 (有钱+不愿)
+           左下 = Q4 (没钱+不愿)
+        */
+        
+        .area-top-left { grid-column: 1; grid-row: 1; }  /* 有钱+不愿 */
+        .area-top-right { grid-column: 2; grid-row: 1; } /* 有钱+愿 */
+        .area-bottom-left { grid-column: 1; grid-row: 2; } /* 没钱+不愿 */
+        .area-bottom-right { grid-column: 2; grid-row: 2; } /* 没钱+愿 */
+
+    </style>
+</head>
+<body>
+
+    <h2>用户价值与转化策略矩阵</h2>
+
+    <div class="quadrant-container">
+        <!-- 标签 -->
+        <div class="axis-label top-label">💰 有钱 (支付能力强)</div>
+        <div class="axis-label bottom-label">💸 没钱 (支付能力弱)</div>
+        <div class="axis-label left-label">✋ 不愿花<br>(意愿低)</div>
+        <div class="axis-label right-label">❤️ 愿意花<br>(意愿高)</div>
+
+        <!-- 象限内容 -->
+
+        <!-- 象限 3: 有钱但抠门 (左上) -->
+        <div class="quadrant q3 area-top-left">
+            <div class="q-title">理智保守派</div>
+            <div class="q-desc">有实力但极其挑剔，看重价值回报 (ROI) 和实用性。难啃的骨头。</div>
+            <div class="q-action">策略：强调长远价值</div>
+        </div>
+
+        <!-- 象限 1: 有钱且大方 (右上) - 核心目标 -->
+        <div class="quadrant q1 area-top-right">
+            <div class="q-title">🏆 黄金VIP客户</div>
+            <div class="q-desc">不仅有预算，还追求体验。对价格不敏感，痛快下单。</div>
+            <div class="q-action">策略：极致服务 & 尊贵感</div>
+        </div>
+
+        <!-- 象限 4: 没钱且抠门 (左下) -->
+        <div class="quadrant q4 area-bottom-left">
+            <div class="q-title">非目标用户</div>
+            <div class="q-desc">预算不足且无购买欲望。不要在他们身上浪费太多销售精力。</div>
+            <div class="q-action">策略：自动化/放弃</div>
+        </div>
+
+        <!-- 象限 2: 没钱但想买 (右下) -->
+        <div class="quadrant q2 area-bottom-right">
+            <div class="q-title">⚡ 潜力铁粉</div>
+            <div class="q-desc">非常喜欢你的产品，但囊中羞涩。愿意为了买而存钱或分期。</div>
+            <div class="q-action">策略：促销折扣 & 分期</div>
+        </div>
+
+    </div>
+
+</body>
+</html>

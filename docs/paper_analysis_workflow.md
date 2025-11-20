@@ -10,11 +10,13 @@
     -   根据文章/论文的主题，在 `papers/` 目录下创建一个新的、语义化的子目录。目录名应使用小写字母和连字符（kebab-case），例如 `papers/continuous-autoregressive-language-models`。
 
 2.  **获取原始内容**：
-    -   **情况 A：如果源是 PDF 文件**
+    -   **情况 A：如果用户已直接提供文本内容**
+        -   将用户在任务描述中提供的文本内容，直接复制并保存为 `source_content.md` 文件。此为最优先情况，无需执行任何脚本。
+    -   **情况 B：如果源是 PDF 文件**
         -   使用 `curl` 将 PDF 下载到新创建的目录中。
         -   使用 `scripts/read_paper.py` 脚本，将 PDF 的文本内容提取出来，并保存为 `source_content.md`。
         -   **注意**：如遇依赖缺失（如 `PyMuPDF`），应先安装。
-    -   **情况 B：如果源是 HTML 网页/文章**
+    -   **情况 C：如果源是 HTML 网页/文章**
         -   使用 `scripts/html_to_md.py` 脚本，将网页内容抓取并转换为 Markdown 格式，保存为 `source_content.md`。
         -   **注意**：该脚本可能需要特定依赖（如 `beautifulsoup4`, `markdownify`），按需安装。
 
