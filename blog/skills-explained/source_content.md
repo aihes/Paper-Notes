@@ -1,3 +1,8 @@
+---
+layout: default
+title: "Skills explained: How Skills compares to prompts, Projects, MCP, and subagents"
+---
+
 [](/blog-product/claude-apps)
 
 Claude apps
