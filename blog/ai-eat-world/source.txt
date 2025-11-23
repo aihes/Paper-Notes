@@ -1,0 +1,173 @@
+发言人  
+So I was asked to come and explain AI again um at super AI and I always think a good place to start if we want to understand this is to ask, well, what is it that we mean when we say AI this is, I think, a really important observation from laurie tesla, who was an ai scientist, that AI is whatever machines can't do yet because once it works, we say, well, that's not ai anymore. That's your software. 
+发言人  
+Ai is the stuff that doesn't work yet or maybe that's only just started working. And if we think about the history of this in the s databases had superhuman memory, and people made movies about how databases were going to take over the world. And today, database is a software, or indeed legacy software. 
+发言人  
+And ten years ago, machine learning was AI today, I think machine learning is just software. I would guess probably half the people in this room would say it's still ai, and the other half would say no. Now it's just software. 
+发言人  
+You use your phone, you take a picture of your child or your dog, and you can search for it. And fifteen years ago, that would have been witchcraft. And ten years ago, it was a and now it's your software. 
+发言人  
+And today we have large language models and generative ai, whatever we want to call it. And maybe this is AI or if you're sam altman trying to get out of your microsoft contract, you will say it's super intelligence for everybody else. Is this AI or in ten years'time is still just going to be more software noise now I think we don't know yet. 
+发言人  
+Bill gates here two years ago, three years ago, saying, well, in his lifetime, this was the biggest thing he'd seen since the graphical user interface. So bill is suggesting, no, this isn't just more software, this is something else. Associate brynn profounder of google saying something similar that we were on the track to agi, that no, this isn't more software. 
+发言人  
+This is something else. And so if we think about the progression of technology over the last fifty or sixty years, we've tended to move in cycles. So we have a platform shift. 
+发言人  
+Every ten or fifteen years, we have mainframes, and then we had pcs and then the web and then smartphones. And you could put other things on here. You could put databases or client server or open source. 
+发言人  
+And each of these pulled in all of the investment in innovation and company creation. The old thing is still there. Airlines still run on mainframes. 
+发言人  
+Banks still run on mainframes. But the new thing is where all the innovation or the investment or the change or the company creation happens. And so the view is that now this is the next platform shift. 
+发言人  
+Smart generation of ai is the next thing after smartphones, after the web, after pcs. Um but there's also a view that says that um no, this is something fundamentally different. This is breaking the cycle. It's much bigger change than that. It's something more like electricity or computing or fire or like the next generation humanity or something else. 
+发言人  
+And out of that, I think you get a um a range of possible outcomes that it might be that this is just more software, that there will be thousands of models, just as there are thousands of databases or thousands of spreadsheets, millions of spreadsheets or and then the other extreme it might be that we'll have one giant world computer that runs everything and you can go to it and say, how do I move to singapore or how do I buy a house in hong kong or how do I do my taxes in five different jurisdictions? So it'll just do it for you. The thing is, we don't really know what's going to happen there, and we have a range of possibilities and a range of opinions. 
+发言人  
+And and it's important to understand, we've kind of never quite known how this is going to go. So Larry tesla, on the one hand, said ai becomes just software. On the other hand, Marvin minsky at the same time said that in three to eight years, we'll have a machine with the general intelligence of a human being. 
+发言人  
+And he was right. In three to eight years, we'll have a machine with a general intelligence of a human being, and he may always be right. Check back in three to eight years and see, we'll find out either the machines will be treating us as pets or this will have become software again. 
+发言人  
+And so if we look at the conversations that are happening in the tech industry now, there are these two very different ways of looking at it. On the one hand, you have people saying, this is going to transform humanity. This is going to change the nature of society. 
+发言人  
+And on the other hand, you have people taking these models and making them faster and using them to transform the reconciliation of overdue invoices inside large telecoms companies. So you have this kind of widespread and and possibility, and i'm mostly going to talk about the first of these. So let's talk about model building, jack. 
+发言人  
+Gp t dropped two and a half years ago, three years ago. And what happened since then. We have much more capital. 
+发言人  
+We have a pricing collapse. We have lots of new exciting stuff, lots of buzz words, lots of acronyms, lots of new terminology and jargon. Um we don't appear to have any obvious mouths. 
+发言人  
+They don't seem to be any winner takes all effect, any barriers, competition. And we have a huge surge of open source. If we first look at that surge in capital, the big four platform companies last year spent about two hundred and twenty billion europe dollars building infrastructure. 
+发言人  
+This year, they've said they'll probably spend something over three hundred billion dollars building data centers. So we've got more than doubling of the investment in infrastructure in order to build platforms to make this work noise to. It's interesting looking at microsoft. 
+发言人  
+I'm old enough to remember when microsoft's business was putting a one dollar cd in a ten dollar box and selling it dt for two hundred and fifty dollars. And now microsoft is spending over thirty percent of its revenue on capex, which is double what a typical telco spends. So we've got this enormous search of investment. 
+发言人  
+A large portion of this, as we know, is going to um in video, which whose chart is still going up into the right. As the caption says, this is also a contract manufacturing chart. And so in video is now doing over forty five billion dollars a quarter, a quarter selling ai chips into the data center industry. 
+发言人  
+But what all of that investment has produced, by and large, is a bunch of models that look kind of like commodities. Weren't chat G, P. T. launched. 
+发言人  
+There were the first ones out there and nobody asked how to model that was anything like as today, there were lots of people who are making models that are pretty much the same level of quality, sometimes open an hour ahead, sometimes they aren't. But there's a lot of models. indeed. 
+发言人  
+I think what deep seat proved six months ago, deep seat just kind of proved the point that anybody with half a billion dollars can have a frontier model, and half a billion dollars isn't nothing. Only a few people in this room have half a billion dollars in the bank unk. But the tech company, the tech industry is a big industry. 
+发言人  
+There's a lot of big companies. There's a lot of people who can afford to invest that kind of money. On the other hand, what's happened in parallel to this is that the models themselves have become much cheaper. So we have an order of magnitude, maybe two orders of magnitude, decline in the costs of the cost to produce a given result every year. 
+发言人  
+This is an observation someone's made in lmc are both the most expensive and the fastest appreciating asset in tech history, possibly any history um but if you kind of step back from all of this um we've got all of these acronyms, all of these charts, all of these measurements, all of these benchMarks. This all looks very like the pc industry twenty or thirty years ago. These are a couple of examples I found online. 
+发言人  
+One hundred and ninety are the fastest pcs, which would be, sort of, sometime in the early nineties, nineteen of the fastest fixed fifty six k modems. And there was a time when you had to know what all the acronyms were. You had to know how many megahertz and how many gigabytes and how many chips you are buying. 
+发言人  
+And then you've all got abstracted away. And you didn't need to know you had this wave of a furious competition and then it got abstracted away and value moved somewhere else. And that's probably what's going to happen with this stuff as well. 
+发言人  
+It all becomes commoditized and the value moves somewhere else in the stack is also worth pointing out though that although having the models themselves seem to be commodities, consumer awareness doesn't look like commodity. So here we have a model score versus app store rank and google trends. Perplexity, which gets a huge amount of buzz in the industry, doesn't even rank on either of these charts. 
+发言人  
+It does seem like chat ebt is on the way to becoming a verb in the way that google became a verb. On the other hand, it may be becoming a verb on the way that myspace became a verb. The differentiation appears to be in what you build on top, not on the in engineering and the technology, at least at this stage. 
+发言人  
+So if we pull those threads together, like what does this mean if you're not an individual shareholder, if you're not ATSN fee shareholder? Well, there's an enormous amount of investment and investment and enormous amount of fear of missing out. The models are getting Better and cheaper, but the models seem to be commodities. 
+发言人  
+And for anybody else, the models are just there and available. You can probably download them, you can run them on a mac, and the value moves somewhere else. The value moves up the stack. And that gets, I think, to the more interesting set of conversations, which is around deployment. 
+发言人  
+What do we do with this? How do we use this? How does this get used? What do we spend on it? And whenever you have a new technology, there's a set of puzzles around what is it that this is, how does this work? How do we understand this? And and I think there's a kind of a useful way to think about generative ai is that traditional software is deterministic. 
+发言人  
+It follows logical steps. It does things that are easy to explain to a computer. It's easy to tell a computer how you calculate a mortgage. 
+发言人  
+It is hard to do it in your head, but it's easy to tell a how you would do that. What machine learning did was move this to a statistics question to move this to a probabilistic model. And machine learning solved things that were hard to explain to a computer, like, why is that credit card transaction? weird. 
+发言人  
+What does this chinese word mean in malay? What does this japanese sentence mean in english? Why is that a picture of a cat, a, not a dog? Why does our robot keep falling over? And so machine learning solved that. Large language models, again, are probabilistic. 
+发言人  
+And it seems that what they're good at right now, it seems it would be easy to explain to a person things that would be easy to explain, maybe to an intern, anything where you could ask a human to do this for you in ten seconds, and they would come back with it the next day. You can probably ask in L, L, M. To do, and it will give you an answer, anything where it would take you a half hour meeting in order to set up the project. 
+发言人  
+And you need to give a bunch of contexts and have a bunch of questions. LL, M is probably fail at those, not because they can't do the task, but because we can't explain the task. It's hard to explain. All of that kind of gets us to these questions that every big company is asking now is that this all sounds very cool, but what is it that we do with this is this is something that computers could never do before, except that they might get it wrong because it's statistical, probabilistic system. 
+发言人  
+What do we do with this? How do we use it? What happens when you open chat, G, P, T, and you have this blank screen and you don't know what you ask, if you ask it and what you get back isn't quite what you wanted. 
+发言人  
+How do you fix that? How do you deal with the fact that these models have a probabilistic answer? And so the answer will not always be exactly correct. Where do you put the human in the loop? What's the right way to use is to build software at a very kind of conceptual level. 
+发言人  
+I think is interesting to ask, do you use the LLM to control all the other software? So do you let the LLM talk to oracle and the sales force and sap and get answers back and tell them what to do? Does the lm sit at the top of the stack? Or is the LLM just another api? An oracle or salesforce can use a claude api to do some sentiment analysis or to draft you an email. 
+发言人  
+But all of your source of truth and all of your fundamental control should sit in your traditional software. The answer to that is probably yes, depending on what you're trying to build. But if we step back from this and step back from kind of the ai bubble of everybody who's using this all the time and talking to everybody else he's using this all the time, is kind of important to remember that most people are kind of puzzled. 
+发言人  
+So this is a bunch of survey data that I pulled from the end of last year on how many people are actually using a generative ai chat board. And I very carefully use that definition so that you're not capturing people who've taken a picture in snap and put a cool, cool filter. And the answer is that sort of something between seven, eight, nine, ten percent of people are using this every day unk. 
+发言人  
+And another kind of twenty percent of people are using it maybe once a week or every two weeks, and then probably double that used at once and thought, I have no idea what to do with this. This is kind of a really interesting kind of statistic because it says this. A lot of people who use this understand it, get it. 
+发言人  
+They've got the account, they go to the website and and it's useful maybe once a week. And that isn't what you hear from people who think this is going to transform humanity. If it's going to transform humanity, why is it something that I use every week rather than something that I have open all of the time? 
+发言人  
+If we look at how enterprises are thinking about this, you get a slightly different picture, which is the series over on the right here. What do I do with this? That's the lowest that's not actually a big reason to hesitate. 
+发言人  
+The real reasons to hesitate are, well, we get it, but it's hard. We have to worry about security. We don't have the inhouse expertise. 
+发言人  
+We're worried about the data rates. We haven't got our data in order. It's actually more difficult to deploy this even if you can understand what the use cases might be. 
+发言人  
+now. However, I think it's kind of important to remember that the future always takes time. This is a chart I love of enterprise adoption of cloud. And if you're in the tech industry, cloud is kind of old and boring and done in the same from the two thousands, but it's still only sort of twenty to thirty percent of enterprise workflows. 
+发言人  
+And the CIO is always desperately hoping that they'll get the cfo to give them budget to replacement in three years, but they never actually managed to get the budget. It does actually take time to deploy new technology. And we should remember, like chat LLM didn't exist three years ago. 
+发言人  
+It takes a while to build software and then it takes a while to get people to deploy it. And we should expect this to take a bit longer. And we should think that more generally about any new technology and that we had these kind of questions with every platform shift. 
+发言人  
+I was a baby analyst. Win three g was the big thing. And analysts and investors would keep saying, well, what's the killer app for three g what should we do with three g why would consumers buy three g and the answer was that having the internet in your pocket was kind of a big deal. 
+发言人  
+And smartphones replaced pcs. The same kind of questions came up with the cloud, like only an idiot would trust amazon or google with their data. And the same kind of questions that come up now with L. 
+发言人  
+L. M. This is kind of weird and strange and different and we don't wanna do with it. But then it's always weird and strange and different and we don't know what to do with it. 
+发言人  
+So maybe actually we should step back and think, well, what's the standard pattern for how you deploy new technology? And to begin with, with every new technology, you absorb it that you make it a feature. The incumbents add it to all of their existing stuff. 
+发言人  
+You use it to automate the obvious, easy things where you can see that, that would be useful immediately. You do the early, obvious stuff a little bit later on. Then you start innovating, you start thinking of new things that you could do, new things that weren't possible. 
+发言人  
+You move from bottom line innovation to top line innovation. Startups get founded that unbundle the incumbents or unk existing business models. And every now and then, there's a third step where somebody actually disrupts the industry, changes the question, ask different questions and creates airbnb as opposed to putting hotel bookings online. But that takes longer. 
+发言人  
+Again, I think a kind of a useful way to understand this is to go back and look again at a platform shift, which is to look at spreadsheet, which some of you may be heard we talk about this before, but I always think it's a really useful this is visit out, which was the first successful software spread sheet in the late s and before this spread sheets were paper. You can buy paper, play a spreadsheet. And so with visit alc, you can change the interest rate here, and all the other numbers change. 
+发言人  
+And if you were an accountant in, you would see that. And that would transform your life because it could do a week of work in an afternoon or in five minutes or five minutes. But if you were a lawyer and you looked at this, you would think, well, that's great, but I don't have that use case. 
+发言人  
+I don't do spreadsheets, mike. How did you see it? But I don't do that. And that's kind of the stage we're at today with our length. 
+发言人  
+There's a bunch of people who look at this and say, I have that use case. So we are already seeing huge adoption in software development. We're already seeing huge adoption in marketing. There's a bunch of people very excited about this in customer support, although you have to be careful because it will tell you what the answer looks like rather than what the answer is. 
+发言人  
+And you see a lot of adoption in early adopters, probably many people in this room, which to me looks a lot like people who use KANOTION or AIRTABLE any kind of no code tool. There's a certain kind of person that has a certain kind of job, a certain a lot of flexibility in how they do that. They're looking for new ways to do that and say those people are all using chat, ebt and claude and perplexity in gemini and co pilot. 
+发言人  
+Um but for everyone else, this kind of puzzlement, it's not clear what we would do this do with this is worse if suddenly, I think just kind of double tapping on software development. Um it does feel like even if nothing else happens, using AI to generate code is kind of the new aws in that this is a new step change in what it takes to get software out of the door, how quickly you can deploy software, how quickly you can build software companies. But for everyone else, is this sort of puzzlement. 
+发言人  
+What do I do with this? Where we have this canonical quote from Steve jobs is not actually the customer's job to know what they want. It's not the customer's job to know what this new technology is supposed to be useful. 
+发言人  
+It's our job. It's the software industries job. It's entrepreneurs job to um it's CIAS job to work out what you would do with this. 
+发言人  
+One part of that is that you go to someone like etcetera. Um you go and you build new software in the enterprise to CIO. And the consultants work out the new tasks that you could do with this. And so accenture booked one point four billion of generative AI bookings, reported one point four billion of generative AI booking south quarter. 
+发言人  
+There's probably a little bit of ai washing in that as every cio and ceo wants to say, they have an ai strategy and every essential engagement manager wants to report this as generative AI rather than legacy software. But that kind of reflects how enterprise software works. The other extreme is that startups create new use cases. 
+发言人  
+This is kind of some examples of startups that are using LL, MS in order to solve very, very specific problems deep inside enterprises like converting cobalt code into java, reconfiguring, telco billing systems. This is the future of humanity. It's just more software, but it's still really useful. 
+发言人  
+Um and so if we look at those startups coming through White combinator in silicon valley, basically all of them are ai startups. Every big company in the same way is looking at this experimenting, building pilots, sometimes moving those pilots into production, sometimes not. Mostly concentrated in software and customer service. 
+发言人  
+But again, it's kind of early. And of course, it's always early. So this is what C. 
+发言人  
+IO is expected to deploy already have deployed. Typically, about a quarter of big companies have got something. Now another forty percent don't expect to do anything until next year, maybe longer. And that's kind of always how it works. You go through these platform shifts and you go from having one app to dozens of apps to hundreds, and you automate more things with every step. 
+发言人  
+And so that gets to me to this question, well, what's ai strategy? What should we do with ai? And the answer is, well, what kind of question you are asking? Is this a business process optimization question? Or is this a further fundamental existential threat to your company? And and the answer is yes, all of the above existential threats to your company can look different. 
+发言人  
+We always talk about uber, and airbnb is redefining what a market looked like. That's kind of interesting to compare what uber and airbnb actually did. Uber demolished the existing taxi industry. 
+发言人  
+Airbnb was kind of mostly additive to hotels because it was a such a different product. So disruption can look different to different industries depending on the technology. We have a lot of those kind of questions now with LLMS and particularly with search. 
+发言人  
+Um the classic question people always ask is, what happens if I go to google or ChatGPT and just get the answer instead of doing a web search and getting a bunch of links? How does that change the internet? The more interesting question to me, I think, is, well, what happens if you just completely change the question? So what i've done here on the right here is given chat gvt an image of my fridge and said, what should I cook? That's not a google query. 
+发言人  
+That's not something that would produce links. That's changing the nature of the question and how we change how we think about what this might be. And of course, that's also redirecting a trillion dollars of annual that's for ad spend, about half of which currently goes to amazon, meta and amazon. 
+发言人  
+So google method in amazon, if we change how the internet works, if we change what you mean when you ask a question or you search for something, then all um and there's a whole bunch of places where this is going to change things. We just heard about robotics, but the interesting things, I think that I took away from listening to the robotics conversation is there's an ai question here, but these are mostly logistics questions. What are humanoid robots mean for logistics article? Logistics person, how does AI mean, for hollywood asked a hollywood person, the tech industry changes the industry and then everything else changes around it. 
+发言人  
+So just some concluding thoughts, and then i'll give up the time and after two or three years of talking to ai at events like about ai at events like this, it strikes me that all ai questions have one of two answers. The answer is either it will work like every other platform shift. Should we go with microsoft or google or a startup? Should we hire eccentric or bane? Well, how did you do it the last five times? The other class, the question, no one really knows the answer, and that's all. 
+发言人  
+So this is the way every platform shift worked. This is a chart from a diagram of the early internet from no one knew how this was going to work. No one knew that it was going to be the internet. 
+发言人  
+No one knew that the internet was going to be the web. No one knew that the value capture in the web was going to be in search, advertising and then in social. We're kind of in the same place now with LLMS. 
+发言人  
+We know there's going to be some ai stuff, but we don't know the market structure. We don't know how it's going to work. We don't know where the value capture is going to be. 
+发言人  
+We don't know where the money's going to be. Meanwhile, all the other stuff we were excited about before this is still there. So ecommerce is now two hundred and thirty percent of global retail. 
+发言人  
+Google actually has autonomous cars working maybe. And so all the stuff that we were excited about before is still there. Noise and all the stuff that we were excited about for the future is still there. 
+发言人  
+So now we talk about crypto and robotics and space and nuclear. But meanwhile, most of the rest of the economy is being disrupted by ideas form fifteen, twenty, thirty years ago, ideas like e commerce and streaming and sass and workflows. And so we have this kind of progression across the tech industry that we're always excited about the things that are going to happen in the future and the things we are building now. But all of the money, the trillions of dollars of revenue is easy in ideas from twenty years ago, and that's probably how it will always be. And with that, I will say thank you. 
+
+
+视频地址：https://www.youtube.com/watch?v=niJpDnNtNp4

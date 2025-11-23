@@ -62,7 +62,7 @@ def print_info(msg: str):
 # 核心工作流
 # ============================================================================
 
-async def run_local_capture_and_publish(url: str, account: str, width: int, limit: int):
+async def run_local_capture_and_publish(url: str, account: str, width: int, limit: int, swap_first_two: bool = False):
     """
     执行完整的本地截图、上传和发布流程。
     """
@@ -83,6 +83,12 @@ async def run_local_capture_and_publish(url: str, account: str, width: int, limi
             raise Exception(f"截图失败: {capture_result.get('error', '未知错误')}")
         
         screenshot_paths = capture_result.get("screenshot_paths", [])
+        
+        # 如果指定了交换顺序并且有足够多的截图
+        if swap_first_two and len(screenshot_paths) >= 2:
+            print_info("检测到交换标志，正在交换前两张截图的顺序。")
+            screenshot_paths[0], screenshot_paths[1] = screenshot_paths[1], screenshot_paths[0]
+            
         text_content = capture_result.get("text_content", "")
 
         if not screenshot_paths:
@@ -156,6 +162,7 @@ async def main():
     parser.add_argument('--account', '-a', required=True, help=f'发布账号 (可选: {", ".join(ACCOUNT_PRESETS.keys())})')
     parser.add_argument('--width', '-w', type=int, default=750, help='截图宽度 (默认: 750)')
     parser.add_argument('--limit', '-l', type=int, default=10, help='最大截图数量 (0为不限制, 默认: 10)')
+    parser.add_argument('--swap-first-two', action='store_true', help='交换前两张截图的顺序。')
     
     args = parser.parse_args()
 
@@ -167,7 +174,8 @@ async def main():
         url=args.url,
         account=args.account,
         width=args.width,
-        limit=args.limit
+        limit=args.limit,
+        swap_first_two=args.swap_first_two
     )
 
     print("\n" + "=" * 70)

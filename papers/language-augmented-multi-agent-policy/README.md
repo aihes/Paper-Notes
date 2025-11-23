@@ -1,5 +1,25 @@
 > **核心摘要**：本文深度解析了LAMP框架，一个创新融合大型语言模型（LLM）与多智能体强化学习（MARL）的决策新范式。通过其核心的“思考-交流-决策”流水线，LAMP赋予AI智能体理解并运用自然语言的能力，使其在复杂的经济博弈中，不仅能处理数值，更能进行策略沟通与社会化学习，最终实现更高效、更鲁棒、可解释的决策。
 
+```mermaid
+graph LR
+    subgraph Stateless ["🚫 无状态 (Stateless LLM)"]
+        U1[用户: Hi] --> L1[LLM] --> R1[回复: Hi there]
+        U2[用户: 我叫 Bob] --> L2[LLM] --> R2[回复: 收到]
+        U3[用户: 我叫什么?] --> L3[LLM] --> R3[回复: 我不知道...]
+        style Stateless fill:#f9f9f9,stroke:#333,stroke-dasharray: 5 5
+    end
+
+    subgraph Stateful ["🧠 有记忆 (Agent with Memory)"]
+        U4[用户: 我叫 Bob] --> M1[(记忆存储)]
+        M1 --> A1[Agent]
+        U5[用户: 我叫什么?] --> A1
+        A1 --检索--> M1
+        M1 --"Bob"--> A1
+        A1 --> R4[回复: 你是 Bob]
+        style Stateful fill:#e1f5fe,stroke:#0277bd
+    end
+```
+
 # 用语言增强决策：解读 LAMP 框架如何融合经济学与AI
 
 > **一句话总结 (TL;DR)**: LAMP (Language-Augmented Multi-Agent Policy) 是一个新框架，它将大型语言模型 (LLM) 的推理能力与多智能体强化学习 (MARL) 相结合。通过一个“思考-交流-决策”的流程，AI智能体不仅能处理数字，还能理解自然语言，从而在复杂的经济环境中做出更聪明、更可靠的决策。

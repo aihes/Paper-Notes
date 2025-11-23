@@ -14,4 +14,5 @@ dependencies = [
     "html2text>=2025.4.15",
     "pysocks>=1.7.1",
     "markdown>=3.6",
+    "openai>=1.0",
 ]

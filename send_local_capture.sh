@@ -48,6 +48,11 @@ if [ -n "$WIDTH" ]; then
   ARGS+=("--width" "$WIDTH")
 fi
 
+# 如果 URL 是 GitHub 域名，则添加交换顺序的标志
+if [[ "$URL" == *"github.com"* ]]; then
+  ARGS+=("--swap-first-two")
+fi
+
 # 执行 Python 脚本并传递所有参数
 echo "正在执行: python3 $PYTHON_SCRIPT ${ARGS[@]}"
 python3 "$PYTHON_SCRIPT" "${ARGS[@]}"
