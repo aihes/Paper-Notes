@@ -6,7 +6,7 @@
 
 ## 图片: `page_1.png`
 
-![page_1.png](../blog/ai-eat-world/images/page_1.png)
+![page_1.png](./images/page_1.png)
 
 ### AI 模型解释
 
@@ -48,7 +48,7 @@
 
 ## 图片: `page_10.png`
 
-![page_10.png](../blog/ai-eat-world/images/page_10.png)
+![page_10.png](./images/page_10.png)
 
 ### AI 模型解释
 
@@ -92,7 +92,7 @@
 
 ## 图片: `page_11.png`
 
-![page_11.png](../blog/ai-eat-world/images/page_11.png)
+![page_11.png](./images/page_11.png)
 
 ### AI 模型解释
 
@@ -130,7 +130,7 @@
 
 ## 图片: `page_12.png`
 
-![page_12.png](../blog/ai-eat-world/images/page_12.png)
+![page_12.png](./images/page_12.png)
 
 ### AI 模型解释
 
@@ -167,7 +167,7 @@
 
 ## 图片: `page_13.png`
 
-![page_13.png](../blog/ai-eat-world/images/page_13.png)
+![page_13.png](./images/page_13.png)
 
 ### AI 模型解释
 
@@ -204,7 +204,7 @@
 
 ## 图片: `page_14.png`
 
-![page_14.png](../blog/ai-eat-world/images/page_14.png)
+![page_14.png](./images/page_14.png)
 
 ### AI 模型解释
 
@@ -245,7 +245,7 @@
 
 ## 图片: `page_15.png`
 
-![page_15.png](../blog/ai-eat-world/images/page_15.png)
+![page_15.png](./images/page_15.png)
 
 ### AI 模型解释
 
@@ -284,7 +284,7 @@
 
 ## 图片: `page_16.png`
 
-![page_16.png](../blog/ai-eat-world/images/page_16.png)
+![page_16.png](./images/page_16.png)
 
 ### AI 模型解释
 
@@ -325,7 +325,7 @@
 
 ## 图片: `page_17.png`
 
-![page_17.png](../blog/ai-eat-world/images/page_17.png)
+![page_17.png](./images/page_17.png)
 
 ### AI 模型解释
 
@@ -370,7 +370,7 @@
 
 ## 图片: `page_18.png`
 
-![page_18.png](../blog/ai-eat-world/images/page_18.png)
+![page_18.png](./images/page_18.png)
 
 ### AI 模型解释
 
@@ -416,7 +416,7 @@
 
 ## 图片: `page_19.png`
 
-![page_19.png](../blog/ai-eat-world/images/page_19.png)
+![page_19.png](./images/page_19.png)
 
 ### AI 模型解释
 
@@ -464,7 +464,7 @@
 
 ## 图片: `page_2.png`
 
-![page_2.png](../blog/ai-eat-world/images/page_2.png)
+![page_2.png](./images/page_2.png)
 
 ### AI 模型解释
 
@@ -505,7 +505,7 @@
 
 ## 图片: `page_20.png`
 
-![page_20.png](../blog/ai-eat-world/images/page_20.png)
+![page_20.png](./images/page_20.png)
 
 ### AI 模型解释
 
@@ -547,7 +547,7 @@
 
 ## 图片: `page_21.png`
 
-![page_21.png](../blog/ai-eat-world/images/page_21.png)
+![page_21.png](./images/page_21.png)
 
 ### AI 模型解释
 
@@ -587,7 +587,7 @@
 
 ## 图片: `page_22.png`
 
-![page_22.png](../blog/ai-eat-world/images/page_22.png)
+![page_22.png](./images/page_22.png)
 
 ### AI 模型解释
 
@@ -632,7 +632,7 @@
 
 ## 图片: `page_23.png`
 
-![page_23.png](../blog/ai-eat-world/images/page_23.png)
+![page_23.png](./images/page_23.png)
 
 ### AI 模型解释
 
@@ -670,7 +670,7 @@
 
 ## 图片: `page_24.png`
 
-![page_24.png](../blog/ai-eat-world/images/page_24.png)
+![page_24.png](./images/page_24.png)
 
 ### AI 模型解释
 
@@ -714,7 +714,7 @@
 
 ## 图片: `page_25.png`
 
-![page_25.png](../blog/ai-eat-world/images/page_25.png)
+![page_25.png](./images/page_25.png)
 
 ### AI 模型解释
 
@@ -752,7 +752,7 @@
 
 ## 图片: `page_26.png`
 
-![page_26.png](../blog/ai-eat-world/images/page_26.png)
+![page_26.png](./images/page_26.png)
 
 ### AI 模型解释
 
@@ -797,7 +797,7 @@
 
 ## 图片: `page_27.png`
 
-![page_27.png](../blog/ai-eat-world/images/page_27.png)
+![page_27.png](./images/page_27.png)
 
 ### AI 模型解释
 
@@ -844,7 +844,7 @@
 
 ## 图片: `page_28.png`
 
-![page_28.png](../blog/ai-eat-world/images/page_28.png)
+![page_28.png](./images/page_28.png)
 
 ### AI 模型解释
 
@@ -887,7 +887,7 @@
 
 ## 图片: `page_29.png`
 
-![page_29.png](../blog/ai-eat-world/images/page_29.png)
+![page_29.png](./images/page_29.png)
 
 ### AI 模型解释
 
@@ -933,7 +933,7 @@
 
 ## 图片: `page_3.png`
 
-![page_3.png](../blog/ai-eat-world/images/page_3.png)
+![page_3.png](./images/page_3.png)
 
 ### AI 模型解释
 
@@ -975,7 +975,7 @@
 
 ## 图片: `page_30.png`
 
-![page_30.png](../blog/ai-eat-world/images/page_30.png)
+![page_30.png](./images/page_30.png)
 
 ### AI 模型解释
 
@@ -1019,7 +1019,7 @@
 
 ## 图片: `page_31.png`
 
-![page_31.png](../blog/ai-eat-world/images/page_31.png)
+![page_31.png](./images/page_31.png)
 
 ### AI 模型解释
 
@@ -1064,7 +1064,7 @@
 
 ## 图片: `page_32.png`
 
-![page_32.png](../blog/ai-eat-world/images/page_32.png)
+![page_32.png](./images/page_32.png)
 
 ### AI 模型解释
 
@@ -1104,7 +1104,7 @@
 
 ## 图片: `page_33.png`
 
-![page_33.png](../blog/ai-eat-world/images/page_33.png)
+![page_33.png](./images/page_33.png)
 
 ### AI 模型解释
 
@@ -1144,7 +1144,7 @@
 
 ## 图片: `page_34.png`
 
-![page_34.png](../blog/ai-eat-world/images/page_34.png)
+![page_34.png](./images/page_34.png)
 
 ### AI 模型解释
 
@@ -1188,7 +1188,7 @@
 
 ## 图片: `page_35.png`
 
-![page_35.png](../blog/ai-eat-world/images/page_35.png)
+![page_35.png](./images/page_35.png)
 
 ### AI 模型解释
 
@@ -1232,7 +1232,7 @@
 
 ## 图片: `page_36.png`
 
-![page_36.png](../blog/ai-eat-world/images/page_36.png)
+![page_36.png](./images/page_36.png)
 
 ### AI 模型解释
 
@@ -1277,7 +1277,7 @@
 
 ## 图片: `page_37.png`
 
-![page_37.png](../blog/ai-eat-world/images/page_37.png)
+![page_37.png](./images/page_37.png)
 
 ### AI 模型解释
 
@@ -1319,7 +1319,7 @@
 
 ## 图片: `page_38.png`
 
-![page_38.png](../blog/ai-eat-world/images/page_38.png)
+![page_38.png](./images/page_38.png)
 
 ### AI 模型解释
 
@@ -1367,7 +1367,7 @@
 
 ## 图片: `page_39.png`
 
-![page_39.png](../blog/ai-eat-world/images/page_39.png)
+![page_39.png](./images/page_39.png)
 
 ### AI 模型解释
 
@@ -1418,7 +1418,7 @@
 
 ## 图片: `page_4.png`
 
-![page_4.png](../blog/ai-eat-world/images/page_4.png)
+![page_4.png](./images/page_4.png)
 
 ### AI 模型解释
 
@@ -1462,7 +1462,7 @@
 
 ## 图片: `page_40.png`
 
-![page_40.png](../blog/ai-eat-world/images/page_40.png)
+![page_40.png](./images/page_40.png)
 
 ### AI 模型解释
 
@@ -1500,7 +1500,7 @@
 
 ## 图片: `page_41.png`
 
-![page_41.png](../blog/ai-eat-world/images/page_41.png)
+![page_41.png](./images/page_41.png)
 
 ### AI 模型解释
 
@@ -1542,7 +1542,7 @@
 
 ## 图片: `page_42.png`
 
-![page_42.png](../blog/ai-eat-world/images/page_42.png)
+![page_42.png](./images/page_42.png)
 
 ### AI 模型解释
 
@@ -1585,7 +1585,7 @@
 
 ## 图片: `page_43.png`
 
-![page_43.png](../blog/ai-eat-world/images/page_43.png)
+![page_43.png](./images/page_43.png)
 
 ### AI 模型解释
 
@@ -1627,7 +1627,7 @@
 
 ## 图片: `page_44.png`
 
-![page_44.png](../blog/ai-eat-world/images/page_44.png)
+![page_44.png](./images/page_44.png)
 
 ### AI 模型解释
 
@@ -1672,7 +1672,7 @@
 
 ## 图片: `page_45.png`
 
-![page_45.png](../blog/ai-eat-world/images/page_45.png)
+![page_45.png](./images/page_45.png)
 
 ### AI 模型解释
 
@@ -1716,7 +1716,7 @@
 
 ## 图片: `page_46.png`
 
-![page_46.png](../blog/ai-eat-world/images/page_46.png)
+![page_46.png](./images/page_46.png)
 
 ### AI 模型解释
 
@@ -1760,7 +1760,7 @@
 
 ## 图片: `page_47.png`
 
-![page_47.png](../blog/ai-eat-world/images/page_47.png)
+![page_47.png](./images/page_47.png)
 
 ### AI 模型解释
 
@@ -1806,7 +1806,7 @@
 
 ## 图片: `page_48.png`
 
-![page_48.png](../blog/ai-eat-world/images/page_48.png)
+![page_48.png](./images/page_48.png)
 
 ### AI 模型解释
 
@@ -1847,7 +1847,7 @@
 
 ## 图片: `page_49.png`
 
-![page_49.png](../blog/ai-eat-world/images/page_49.png)
+![page_49.png](./images/page_49.png)
 
 ### AI 模型解释
 
@@ -1879,7 +1879,7 @@
 
 ## 图片: `page_5.png`
 
-![page_5.png](../blog/ai-eat-world/images/page_5.png)
+![page_5.png](./images/page_5.png)
 
 ### AI 模型解释
 
@@ -1923,7 +1923,7 @@
 
 ## 图片: `page_50.png`
 
-![page_50.png](../blog/ai-eat-world/images/page_50.png)
+![page_50.png](./images/page_50.png)
 
 ### AI 模型解释
 
@@ -1965,7 +1965,7 @@
 
 ## 图片: `page_51.png`
 
-![page_51.png](../blog/ai-eat-world/images/page_51.png)
+![page_51.png](./images/page_51.png)
 
 ### AI 模型解释
 
@@ -2009,7 +2009,7 @@
 
 ## 图片: `page_52.png`
 
-![page_52.png](../blog/ai-eat-world/images/page_52.png)
+![page_52.png](./images/page_52.png)
 
 ### AI 模型解释
 
@@ -2057,7 +2057,7 @@
 
 ## 图片: `page_53.png`
 
-![page_53.png](../blog/ai-eat-world/images/page_53.png)
+![page_53.png](./images/page_53.png)
 
 ### AI 模型解释
 
@@ -2108,7 +2108,7 @@
 
 ## 图片: `page_54.png`
 
-![page_54.png](../blog/ai-eat-world/images/page_54.png)
+![page_54.png](./images/page_54.png)
 
 ### AI 模型解释
 
@@ -2147,7 +2147,7 @@
 
 ## 图片: `page_55.png`
 
-![page_55.png](../blog/ai-eat-world/images/page_55.png)
+![page_55.png](./images/page_55.png)
 
 ### AI 模型解释
 
@@ -2198,7 +2198,7 @@
 
 ## 图片: `page_56.png`
 
-![page_56.png](../blog/ai-eat-world/images/page_56.png)
+![page_56.png](./images/page_56.png)
 
 ### AI 模型解释
 
@@ -2236,7 +2236,7 @@
 
 ## 图片: `page_57.png`
 
-![page_57.png](../blog/ai-eat-world/images/page_57.png)
+![page_57.png](./images/page_57.png)
 
 ### AI 模型解释
 
@@ -2280,7 +2280,7 @@
 
 ## 图片: `page_58.png`
 
-![page_58.png](../blog/ai-eat-world/images/page_58.png)
+![page_58.png](./images/page_58.png)
 
 ### AI 模型解释
 
@@ -2332,7 +2332,7 @@
 
 ## 图片: `page_59.png`
 
-![page_59.png](../blog/ai-eat-world/images/page_59.png)
+![page_59.png](./images/page_59.png)
 
 ### AI 模型解释
 
@@ -2375,7 +2375,7 @@
 
 ## 图片: `page_6.png`
 
-![page_6.png](../blog/ai-eat-world/images/page_6.png)
+![page_6.png](./images/page_6.png)
 
 ### AI 模型解释
 
@@ -2410,7 +2410,7 @@
 
 ## 图片: `page_60.png`
 
-![page_60.png](../blog/ai-eat-world/images/page_60.png)
+![page_60.png](./images/page_60.png)
 
 ### AI 模型解释
 
@@ -2449,7 +2449,7 @@
 
 ## 图片: `page_61.png`
 
-![page_61.png](../blog/ai-eat-world/images/page_61.png)
+![page_61.png](./images/page_61.png)
 
 ### AI 模型解释
 
@@ -2487,7 +2487,7 @@
 
 ## 图片: `page_62.png`
 
-![page_62.png](../blog/ai-eat-world/images/page_62.png)
+![page_62.png](./images/page_62.png)
 
 ### AI 模型解释
 
@@ -2535,7 +2535,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_63.png`
 
-![page_63.png](../blog/ai-eat-world/images/page_63.png)
+![page_63.png](./images/page_63.png)
 
 ### AI 模型解释
 
@@ -2576,7 +2576,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_64.png`
 
-![page_64.png](../blog/ai-eat-world/images/page_64.png)
+![page_64.png](./images/page_64.png)
 
 ### AI 模型解释
 
@@ -2616,7 +2616,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_65.png`
 
-![page_65.png](../blog/ai-eat-world/images/page_65.png)
+![page_65.png](./images/page_65.png)
 
 ### AI 模型解释
 
@@ -2653,7 +2653,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_66.png`
 
-![page_66.png](../blog/ai-eat-world/images/page_66.png)
+![page_66.png](./images/page_66.png)
 
 ### AI 模型解释
 
@@ -2700,7 +2700,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_67.png`
 
-![page_67.png](../blog/ai-eat-world/images/page_67.png)
+![page_67.png](./images/page_67.png)
 
 ### AI 模型解释
 
@@ -2740,7 +2740,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_68.png`
 
-![page_68.png](../blog/ai-eat-world/images/page_68.png)
+![page_68.png](./images/page_68.png)
 
 ### AI 模型解释
 
@@ -2784,7 +2784,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_69.png`
 
-![page_69.png](../blog/ai-eat-world/images/page_69.png)
+![page_69.png](./images/page_69.png)
 
 ### AI 模型解释
 
@@ -2825,7 +2825,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_7.png`
 
-![page_7.png](../blog/ai-eat-world/images/page_7.png)
+![page_7.png](./images/page_7.png)
 
 ### AI 模型解释
 
@@ -2866,7 +2866,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_70.png`
 
-![page_70.png](../blog/ai-eat-world/images/page_70.png)
+![page_70.png](./images/page_70.png)
 
 ### AI 模型解释
 
@@ -2913,7 +2913,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_71.png`
 
-![page_71.png](../blog/ai-eat-world/images/page_71.png)
+![page_71.png](./images/page_71.png)
 
 ### AI 模型解释
 
@@ -2952,7 +2952,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_72.png`
 
-![page_72.png](../blog/ai-eat-world/images/page_72.png)
+![page_72.png](./images/page_72.png)
 
 ### AI 模型解释
 
@@ -3029,7 +3029,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_73.png`
 
-![page_73.png](../blog/ai-eat-world/images/page_73.png)
+![page_73.png](./images/page_73.png)
 
 ### AI 模型解释
 
@@ -3076,7 +3076,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_74.png`
 
-![page_74.png](../blog/ai-eat-world/images/page_74.png)
+![page_74.png](./images/page_74.png)
 
 ### AI 模型解释
 
@@ -3117,7 +3117,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_75.png`
 
-![page_75.png](../blog/ai-eat-world/images/page_75.png)
+![page_75.png](./images/page_75.png)
 
 ### AI 模型解释
 
@@ -3162,7 +3162,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_76.png`
 
-![page_76.png](../blog/ai-eat-world/images/page_76.png)
+![page_76.png](./images/page_76.png)
 
 ### AI 模型解释
 
@@ -3204,7 +3204,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_77.png`
 
-![page_77.png](../blog/ai-eat-world/images/page_77.png)
+![page_77.png](./images/page_77.png)
 
 ### AI 模型解释
 
@@ -3246,7 +3246,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_78.png`
 
-![page_78.png](../blog/ai-eat-world/images/page_78.png)
+![page_78.png](./images/page_78.png)
 
 ### AI 模型解释
 
@@ -3289,7 +3289,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_79.png`
 
-![page_79.png](../blog/ai-eat-world/images/page_79.png)
+![page_79.png](./images/page_79.png)
 
 ### AI 模型解释
 
@@ -3335,7 +3335,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_8.png`
 
-![page_8.png](../blog/ai-eat-world/images/page_8.png)
+![page_8.png](./images/page_8.png)
 
 ### AI 模型解释
 
@@ -3378,7 +3378,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_80.png`
 
-![page_80.png](../blog/ai-eat-world/images/page_80.png)
+![page_80.png](./images/page_80.png)
 
 ### AI 模型解释
 
@@ -3423,7 +3423,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_81.png`
 
-![page_81.png](../blog/ai-eat-world/images/page_81.png)
+![page_81.png](./images/page_81.png)
 
 ### AI 模型解释
 
@@ -3461,7 +3461,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_82.png`
 
-![page_82.png](../blog/ai-eat-world/images/page_82.png)
+![page_82.png](./images/page_82.png)
 
 ### AI 模型解释
 
@@ -3501,7 +3501,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_83.png`
 
-![page_83.png](../blog/ai-eat-world/images/page_83.png)
+![page_83.png](./images/page_83.png)
 
 ### AI 模型解释
 
@@ -3535,7 +3535,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_84.png`
 
-![page_84.png](../blog/ai-eat-world/images/page_84.png)
+![page_84.png](./images/page_84.png)
 
 ### AI 模型解释
 
@@ -3581,7 +3581,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_85.png`
 
-![page_85.png](../blog/ai-eat-world/images/page_85.png)
+![page_85.png](./images/page_85.png)
 
 ### AI 模型解释
 
@@ -3625,7 +3625,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_86.png`
 
-![page_86.png](../blog/ai-eat-world/images/page_86.png)
+![page_86.png](./images/page_86.png)
 
 ### AI 模型解释
 
@@ -3669,7 +3669,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_87.png`
 
-![page_87.png](../blog/ai-eat-world/images/page_87.png)
+![page_87.png](./images/page_87.png)
 
 ### AI 模型解释
 
@@ -3712,7 +3712,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_88.png`
 
-![page_88.png](../blog/ai-eat-world/images/page_88.png)
+![page_88.png](./images/page_88.png)
 
 ### AI 模型解释
 
@@ -3751,7 +3751,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_89.png`
 
-![page_89.png](../blog/ai-eat-world/images/page_89.png)
+![page_89.png](./images/page_89.png)
 
 ### AI 模型解释
 
@@ -3791,7 +3791,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_9.png`
 
-![page_9.png](../blog/ai-eat-world/images/page_9.png)
+![page_9.png](./images/page_9.png)
 
 ### AI 模型解释
 
@@ -3837,7 +3837,7 @@ LLM 自动化（或 LLM 的发展）的未来，不应仅仅看作是更“捆�
 
 ## 图片: `page_90.png`
 
-![page_90.png](../blog/ai-eat-world/images/page_90.png)
+![page_90.png](./images/page_90.png)
 
 ### AI 模型解释
 
