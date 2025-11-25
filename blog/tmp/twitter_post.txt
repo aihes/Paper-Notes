@@ -1,7 +1,63 @@
-This is one of the most insane things Nano Banana Pro 🍌 can do.
+Google 官方新出一份关于 Nano Banana Pro（即 Gemini 3 Pro Image）高级功能指南，才发现前两天忽略了很多核心东西！👇
 
-It can reproduce figures with mind-blowing precision. 
+Nano Banana Pro 版本引入了“思考 (Thinking)”能力、特别是可以搜索 (Search Grounding) 以及高保真度的 4K 输出。可以解锁复杂的创意任务。
 
-No competition in this regard!
+👏本指南将带你通过 Gemini Developer API 了解 Nano Banana Pro 的高级功能。
+本指南将涵盖：
+ * 在 Google AI Studio 中使用 Nano Banana Pro
+ * 项目设置
+ * 初始化客户端 (Client)
+ * 基本生成（经典用法）
+ * “思考”过程 (The "Thinking" Process)
+ * 搜索落地 (Search Grounding)
+ * 高分辨率 4K 生成
+ * 多语言能力
+ * 高级图像混合
+ * Pro 独家展示 (Demos)
+ * 最佳实践与提示词技巧
 
-Prompt: "Please reproduce this chart in high quality and fidelity and offer annotated labels to better understand it."
+开始👇
+
+1，对于开发者来说，Google AI Studio 是制作原型和测试提示词 (Prompts) 的最佳环境。特别需要注意Pro 版本没有免费层级，你的测试也是扣钱的。
+
+2，配置 AI studio项目需要设置API key，首次使用会自动创建key的。
+
+> Nano Banana Pro 的费用是多少？
+
+使用 Nano Banana Pro 生成图像比 Flash 版本更昂贵，特别是 4K 图像。在本文发布时，生成一张 1K 或 2K 图像的费用为 $0.134，而 4K 图像则为 $0.24（外加输入和文本输出的 token 成本）。
+
+使用 Batch API (延时24小时批处理 API)。节省 50% 的生成成本。
+
+3. 初始化客户端，要使用 Pro 模型，你需要使用 gemini-3-pro-image-preview 模型 ID名称。
+
+4. 基本生成（经典用法）
+标准的生成方式，使用 response_modalities（获取文本和图像，或仅获取图像）和 aspect_ratio（长宽比）来控制输出。
+
+聊天模式 (Chat mode) 也是一个选项（官方推荐用于多轮编辑的方式）。
+
+5. “思考”过程 (The "Thinking" Process)
+Nano Banana Pro 不仅仅是在绘图；它在思考。这意味着它可以在生成图像之前，推理你最复杂、最刁钻的提示词。
+
+6. 搜索落地 (Search Grounding) —— 实时魔法
+最具颠覆性的功能之一是 Search Grounding (搜索落地)。Nano Banana Pro 不会停留在过去；它可以访问 Google Search 的实时数据，生成准确、最新的图像。比如想要天气信息？
+
+7. 追求极致：4K 生成 (Go Big or Go Home)
+需要打印级质量的图像吗？Nano Banana Pro 支持 4K 分辨率。
+
+注意： 4K 生成的成本较高，可以在前边先把图片做出来，最后一步才升级4k。
+
+8. 多语言 Banana (Multilingual Capabilities)
+该模型可以用十多种语言生成甚至翻译图像中的文本。这基本上就是视觉万能翻译机。
+
+9. 混合搭配！(高级图像混合)
+虽然 Flash 模型最多可以混合 3 张图像，但 Pro 模型最多可以处理 14 张图像！这简直是一个提示词里的一场派对。非常适合制作复杂的拼贴画或展示你的整个产品线。
+
+10. Nano Banana 和 Nano Banana Pro 的最佳实践与提示词技巧
+为了使用 Nano Banana 模型获得最佳结果，请遵循以下提示词准则：
+ * 高度具体 (Be Hyper-Specific)： 你提供的关于主体、颜色、光线和构图的细节越多，你对输出的控制权就越大。
+ * 提供上下文和意图 (Context and Intent)： 解释图像的目的或所需的氛围。模型对上下文的理解会影响其创意选择。
+ * 迭代与优化 (Iterate and Refine)： 不要指望第一次尝试就完美。利用模型的对话能力进行渐进式修改并优化你的图像。
+ * 使用分步指令： 对于复杂的场景，将你的提示词分解为一系列清晰、顺序的指令。
+ * 使用正向表述 (Positive Framing)： 与其使用“不要车子”之类的负面提示，不如正向描述所需的场景：“一条空无一人、没有交通迹象的街道”。
+ * 控制摄像机： 使用摄影和电影术语来指导构图，例如“广角镜头 (wide-angle shot)”、“微距镜头 (macro shot)”或“低角度视角 (low-angle perspective)”。
+ * 善用搜索落地： 当你知道希望模型使用实时或真实世界数据时，请非常精确地说明。“搜索网络上关于奥林匹克里昂队 (Olympique Lyonnais) 上一场比赛的信息并制作信息图”会比仅仅说“一张 OL 上一场比赛的信息图”效果更好（后者可能也会成功，但不要冒险）。

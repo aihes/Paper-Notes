@@ -61,9 +61,19 @@ if [ -z "$PLATFORM" ] || [ "$PLATFORM" = "x" ]; then
 fi
 
 if [ -z "$PLATFORM" ]; then
-  # 如果是全平台发布，则在平台之间等待
-  echo "等待 30 秒..."
-  sleep 30
+  # 如果是全平台发布，则根据图片数量动态等待
+  num_images=$(ls -1 "$IMAGE_DIR" 2>/dev/null | wc -l)
+  if [ "$num_images" -gt 0 ]; then
+    # 包含图片：基础等待30秒，每张额外10秒
+    additional_wait=$((num_images * 10))
+    sleep_duration=$((30 + additional_wait))
+    echo "检测到 $num_images 张图片，平台间共等待 ${sleep_duration} 秒..."
+    sleep $sleep_duration
+  else
+    # 不含图片：默认等待30秒
+    echo "未检测到图片，平台间等待 30 秒..."
+    sleep 30
+  fi
 fi
 
 if [ -z "$PLATFORM" ] || [ "$PLATFORM" = "xiaohongshu" ]; then
