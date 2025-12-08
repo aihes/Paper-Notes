@@ -1,41 +1,35 @@
 import fitz  # PyMuPDF
+import sys
 import os
 
-def read_pdf_text(pdf_path):
+def extract_text_from_pdf(pdf_path, output_path):
     """
-    Reads and extracts text from a PDF file.
+    Extracts text from a PDF file and saves it to a markdown file.
     """
-    if not os.path.exists(pdf_path):
-        return f"Error: File not found at {pdf_path}"
-
     try:
         doc = fitz.open(pdf_path)
         text = ""
         for page in doc:
             text += page.get_text()
-        doc.close()
-        return text
+    
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(text)
+        print(f"Successfully extracted text from {pdf_path} to {output_path}")
+    
     except Exception as e:
-        return f"An error occurred: {e}"
-
-import argparse
+        print(f"Error processing {pdf_path}: {e}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Extract text from a PDF file.")
-    parser.add_argument("pdf_path", help="The path to the PDF file to read.")
-    parser.add_argument("--output_path", help="Optional. The path to save the extracted text file.", default=None)
-
-    args = parser.parse_args()
-
-    extracted_text = read_pdf_text(args.pdf_path)
-
-    if args.output_path:
-        try:
-            with open(args.output_path, 'w', encoding='utf-8') as f:
-                f.write(extracted_text)
-            print(f"Successfully extracted text to {args.output_path}")
-        except Exception as e:
-            print(f"Error writing to file: {e}")
-    else:
-        # Print the full extracted text to standard output
-        print(extracted_text)
+    if len(sys.argv) != 3:
+        print("Usage: python scripts/read_paper.py <path_to_pdf> <output_md_path>", file=sys.stderr)
+        sys.exit(1)
+    
+    pdf_path = sys.argv[1]
+    output_path = sys.argv[2]
+    
+    if not os.path.exists(pdf_path):
+        print(f"Error: PDF file not found at {pdf_path}", file=sys.stderr)
+        sys.exit(1)
+        
+    extract_text_from_pdf(pdf_path, output_path)
