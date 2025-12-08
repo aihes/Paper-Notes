@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 开发者 MVP 架构图</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+        :root {
+            --bg-color: #0f1117;
+            --card-bg: rgba(30, 34, 45, 0.8);
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Noto Sans SC', sans-serif; /* 使用中文字体 */
+            overflow: hidden;
+        }
+
+        /* 16:9 Slide Container */
+        .slide-container {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16/9;
+            background-color: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 上下分布 */
+            padding: 4rem 5rem;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        /* Background Grid Effect */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glowing Orb */
+        .glow-orb {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(0,0,0,0) 70%);
+            top: 0%;
+            right: -10%;
+            z-index: 0;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* Content Layer */
+        .content {
+            position: relative;
+            z-index: 2;
+            flex-grow: 1; /* 占据中间空间 */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* Header Section */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 900px;
+            line-height: 1.5;
+        }
+
+        /* Architecture Visuals */
+        .architecture-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: auto; /* 推到底部 */
+            margin-bottom: 2rem;
+        }
+
+        .arch-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Top Border Colors */
+        .arch-card.soul { border-top: 4px solid var(--accent-purple); }
+        .arch-card.brain { border-top: 4px solid var(--accent-blue); }
+        .arch-card.body { border-top: 4px solid var(--accent-green); }
+
+        .arch-icon {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arch-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.8rem;
+        }
+
+        .arch-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Arrow between cards */
+        .arrow-next {
+            position: absolute;
+            right: -1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--border-color);
+            font-size: 1.5rem;
+            z-index: 10;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .presenter-info {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .info-item h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-item p {
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .blink {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+        <div class="grid-bg"></div>
+        <div class="glow-orb"></div>
+        
+        <div class="content">
+            <div class="header">
+                <div class="tag">内部技术提案</div>
+                <h1>AI 开发者入职计划</h1>
+                <h2>构建全自主“数字员工”的 MVP 架构方案<br>从灵魂到躯体的完整技术实现</h2>
+            </div>
+
+            <div class="architecture-row">
+                <!-- Card 1: Soul -->
+                <div class="arch-card soul">
+                    <div class="arrow-next">→</div>
+                    <div class="arch-icon" style="color: var(--accent-purple)">01. 灵魂层 (Soul)</div>
+                    <div class="arch-title">OpenSpec 协议</div>
+                    <div class="arch-desc">
+                        基于 Spec 的对齐机制。<br>
+                        提案 → 审查 → 归档。<br>
+                        确保 AI 的意图与人类需求严格一致。
+                    </div>
+                </div>
+
+                <!-- Card 2: Brain -->
+                <div class="arch-card brain">
+                    <div class="arrow-next">→</div>
+                    <div class="arch-icon" style="color: var(--accent-blue)">02. 大脑层 (Brain)</div>
+                    <div class="arch-title">长程运行 Harness</div>
+                    <div class="arch-desc">
+                        状态记忆与上下文管理。<br>
+                        包含“初始化 Agent”与“编码 Agent”。<br>
+                        永远不会遗忘任务清单。
+                    </div>
+                </div>
+
+                <!-- Card 3: Body -->
+                <div class="arch-card body">
+                    <div class="arch-icon" style="color: var(--accent-green)">03. 躯体层 (Body)</div>
+                    <div class="arch-title">DevBox & 浏览器</div>
+                    <div class="arch-desc">
+                        完整的 OS 访问权限 (SSH/Shell)。<br>
+                        GUI 操作能力 (Puppeteer)。<br>
+                        像真人一样部署代码。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="presenter-info">
+                <div class="info-item">
+                    <h4>项目名称</h4>
+                    <p>虚拟队友 MVP</p>
+                </div>
+                <div class="info-item">
+                    <h4>核心技术栈</h4>
+                    <p>OpenSpec • Anthropic • DevBox</p>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="blink"></div>
+                SYSTEM ONLINE
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
