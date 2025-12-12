@@ -1,0 +1,14 @@
+【技术解读】无需训练，GUI Agent 如何在 OSWorld 难题上实现 60% 成功率？
+
+针对复杂 UI 和长序列任务，Instruction Agent 提出了一种“演示即编程”的 Test-time 方案。
+
+核心机制解析：
+1. **显式知识提取**：Instructor 模块将人类操作轨迹转化为包含「空间坐标」和「结果预期」的结构化 JSON 指令。
+2. **感知与执行解耦**：利用 UI-Tars 进行精确定位 (Grounding)，GPT-4o 负责逻辑控制与代码生成 (PyAutoGUI)。
+3. **闭环控制**：引入 Verifier 对比每一步操作前后的截图变化，确认执行结果；Backtracker 在失败时通过规划恢复路径，显著提升了鲁棒性。
+
+在 OSWorld 中其他 SOTA Agent 成功率为 0% 的高难度任务集上，该框架达到了 60% 的通过率。这表明，对于特定工作流自动化，基于演示的显式引导比单纯扩大模型参数更为高效。
+
+#AI #GUIAgent #Automation #MachineLearning #OSWorld
+
+原文：https://arxiv.org/abs/2509.07098
