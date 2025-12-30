@@ -100,3 +100,5 @@ code_repositories/todo-app
 # Ignore complex markdown file to prevent build issues
 blog/skyvern-analysis-deep-dive/README.md
 blog/johnny-decimal/
+sdd_export/
+blog/spec-driven-development/

@@ -1,0 +1,35 @@
+【通俗易懂版！2025 AI Agent 核心概念全景解析】
+
+🤯 Agentic AI 的术语多到爆炸？ReAct, MCP, Graph RAG... 看得头大？
+其实，每一个高大上的名词背后，都是为了解决一个**特别傻瓜的具体问题**。
+
+这份由 Prof. Tom Yeh 制作的“Agentic AI 问题集”，我们把它翻译成了**大白话**！👇
+
+🔥 **秒懂核心概念**：
+1.  **Tool Use (工具使用)**：
+    ❌ 痛点：AI 脑子好使，但没有手。
+    ✅ 解法：给它授权，让它能按计算器、发邮件。
+2.  **Chain of Thought (思维链)**：
+    ❌ 痛点：AI 像差生，跳步骤直接瞎蒙答案。
+    ✅ 解法：强迫它把解题过程一步步写出来。
+3.  **Episodic Memory (情景记忆)**：
+    ❌ 痛点：AI 是金鱼记忆，转头就忘。
+    ✅ 解法：给它个“记事本”，记住刚才说了啥。
+4.  **MCP (模型控制协议)**：
+    ❌ 痛点：接一个新工具就要写一套新代码，累死程序员。
+    ✅ 解法：发明一个“万能插座”，即插即用。
+
+💡 **深度解析**：
+不再堆砌术语，而是用“痛点 -> 解法”的逻辑，带你还原 20 个关键技术的发明现场。无论你是技术小白还是产品经理，都能看懂！
+
+👉 **你觉得哪个功能是你最想让 AI 拥有的？欢迎评论区聊聊！**
+
+#AI #AgenticAI #人工智能 #科普 #技术入门
+
+@ProfTomYeh @Vectara
+
+🔗 **完整通俗解读 (含20个概念详解)**：[Agentic_Ai_Problem_Set_Release_12.pdf] (见评论区/附图)
+
+[Images]
+papers/agentic-ai-problem-set-release-12/images/image-p1-1.png
+papers/agentic-ai-problem-set-release-12/images/image-p2-2.png
