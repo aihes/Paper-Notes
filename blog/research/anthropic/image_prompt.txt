@@ -1,0 +1,7 @@
+A highly detailed, cinematic infographic and conceptual art piece titled "The Evolution of AI Agent Evaluation". 
+The image is split into multiple thematic zones or a grand interconnected landscape:
+1. **The Scoring Paradox**: On the left, show a rigid, rusty iron cage representing "Brittle Grading" with a low score of "42%" visible. Outside the cage, a brilliant, multi-dimensional crystalline entity representing "Opus 4.5" is breaking free, its score glowing as "95%".
+2. **The Digital Footprints**: In the center, a deep focus on a "Trace Path" – instead of just a final goal post, show a long, winding, luminescent trail of complex decisions, tool calls, and data transformations leading through a holographic forest. This path is more prominent and detailed than the final destination.
+3. **The Immune System**: Floating analytical shields and microscopic digital nanobots scanning the environment, representing evaluation as a continuous "Immune System" rather than a one-time judge.
+4. **The Digital Workforce**: On the right, a futuristic co-working space where humans and AI agents work together at a round table. The AI agents look like sophisticated, semi-transparent partners. Above them, holographic OKR (Objectives and Key Results) charts replace traditional KPI bars.
+5. **Style**: Futuristic, clean, professional technology blog aesthetic. High-contrast lighting with blue, purple, and gold accents. Wide cinematic 16:9 ratio. Extremely detailed textures on the data flows and agent structures.
