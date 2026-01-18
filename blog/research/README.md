@@ -12,11 +12,13 @@ blog/research/
 │   ├── 01-engineering-blog-overview.md
 │   ├── 02-newsroom-highlights.md
 │   └── 03-economic-index-primitives.md
-└── langchain/                         # LangChain 博客内容
-    ├── 01-blog-overview.md
-    ├── 02-multi-agent-architecture.md
-    ├── 03-agent-engineering-discipline.md
-    └── 04-deepagents-overview.md
+├── langchain/                         # LangChain 博客内容
+│   ├── 01-blog-overview.md
+│   ├── 02-multi-agent-architecture.md
+│   ├── 03-agent-engineering-discipline.md
+│   └── 04-deepagents-overview.md
+└── openai/                            # OpenAI 相关内容
+    └── jason-weng-learning-notes.md
 ```
 
 ## 🎯 快速导航
@@ -77,6 +79,17 @@ blog/research/
 - 大学学历任务: 12x 加速
 - 职业覆盖率: 49% (25%+ 任务)
 - 生产力增长: 1.0-1.8 pp/年
+
+### 📚 OpenAI 内容
+
+#### 1. 翁家翌学习笔记
+**文件:** [openai/jason-weng-learning-notes.md](./openai/jason-weng-learning-notes.md)
+
+**核心主题:**
+- 评价体系与影响力
+- 工业界 vs 学术界 (Infra的重要性)
+- OpenAI 内部洞察 (Scale up, Information flow)
+- 个人成长建议 (Open source, Consistency, Prediction)
 
 ### 📚 LangChain 内容
 

@@ -1,0 +1,8 @@
+A modern, minimalist technical infographic illustration summarizing 'Jason Weng Learning Notes'. The visual style should be clean, using a color palette of OpenAI-like teals, whites, and dark greys. The layout is divided into four connected quadrants or modules:
+
+1.  **Top Left: Redefine Metrics** - Visualizes breaking away from standard charts (GPA) to custom goals (GitHub Stars, Papers). Keywords: "Impact > Grades", "Industry Rules".
+2.  **Top Right: Engineering is Key** - A strong visual emphasis on 'Infrastructure' or a 'Shovel' metaphor, supporting a smaller 'Research/Idea' bulb. Keywords: "Infra > Idea", "Scale Up".
+3.  **Bottom Left: OpenAI Insights** - Visualizing a seamless flow of information or a network without silos. Keywords: "No Silos", "High Talent Density", "Dirty Work".
+4.  **Bottom Right: Personal Growth** - A solo developer figure building something complete (Idea to Demo), or contributing to Open Source. Keywords: "Solo Capability", "Invest in Future".
+
+The overall feel should be professional, inspiring, and tech-forward, suitable for a technical blog post header. No photorealistic humans, use abstract or flat vector style figures.

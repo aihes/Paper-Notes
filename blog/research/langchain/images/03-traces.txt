@@ -1,0 +1,16 @@
+A data visualization of "LangSmith Traces" showing the observability of a Deep Agent.
+
+Visual elements:
+1.  **Timeline View**: A horizontal timeline showing a long-running task (e.g., "1 hour duration").
+2.  **Hierarchical Trace**: The timeline is broken down into nested bars.
+    -   Top bar: "Main Agent Task".
+    -   Middle bars: "Planner", "VFS Write", "Sub-agent: Researcher".
+    -   Bottom bars: "Tool: Search", "Tool: Read File".
+3.  **Status Indicators**: Green checks for success, one yellow warning sign handled by a "Retry" middleware loop.
+4.  **Middleware Inspection**: A magnifying glass or callout box focusing on one step, showing "Middleware Interception: Summarization Triggered".
+
+Style:
+-   UI mockup style, similar to a modern SaaS dashboard (dark mode).
+-   Clean lines, data-dense but readable layout.
+-   Colors: Shades of green (success), yellow (warning), and slate grey (UI background).
+-   Professional, analytics-focused aesthetic.

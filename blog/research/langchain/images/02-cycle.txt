@@ -1,0 +1,20 @@
+A split-screen comparison diagram illustrating "Shallow Loop" vs. "Deep Agent Workflow".
+
+Left Side: **Shallow Loop (The Old Way)**
+-   Simple circular arrow: User Request -> LLM -> Tool -> Response.
+-   Visual style: Flat, 2D, simple icons.
+-   Limitation visual: A small "Context Window" box that is overflowing with text, showing red warning indicators like "Token Limit Exceeded".
+-   The agent looks like a simple chatbot bubble.
+
+Right Side: **Deep Agent (The New Way)**
+-   Complex, structured workflow diagram.
+-   Process: User Request -> **Planner (TODO List)** -> **Sub-agent 1 (Research)** -> **VFS Storage** -> **Sub-agent 2 (Analysis)** -> Final Report.
+-   Visual style: 3D, depth, layered architecture.
+-   The "Context Window" is clean and empty, because data is being offloaded to a "File System" icon (VFS).
+-   The agent looks like a sophisticated control tower or engineer.
+
+Style:
+-   Modern tech infographic style.
+-   High contrast between the "simple/messy" left side and the "structured/clean" right side.
+-   Background: Dark tech blue.
+-   Text should be abstract lines or pseudo-code, not readable English.
