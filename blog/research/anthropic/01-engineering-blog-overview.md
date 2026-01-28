@@ -1,11 +1,16 @@
 # Anthropic Engineering Blog Overview
-Date: 2026-01-15
+Date: 2026-01-26
 Source: https://www.anthropic.com/engineering
 
-## Featured Posts
+## Featured Posts (January 2026)
+
+### Designing AI-resistant technical evaluations
+**Published:** Jan 21, 2026 | **Author:** Tristan Hume
+What we learned from three iterations of a performance engineering take-home that Claude keeps beating. Explores how to design technical assessments that remain effective as AI capabilities advance.
 
 ### Demystifying evals for AI agents
-The capabilities that make agents useful also make them difficult to evaluate. The strategies that work across deployments combine techniques to match the complexity of the systems they measure.
+**Published:** Jan 9, 2026 | **Authors:** Mikaela Grace, Jeremy Hadfield, Rodrigo Olivares, Jiri De Jonghe
+The capabilities that make agents useful also make them difficult to evaluate. A comprehensive guide to designing rigorous and useful evals for agents across various architectures and use cases.
 
 ### Recent Engineering Posts (Nov-Dec 2025)
 

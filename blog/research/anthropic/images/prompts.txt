@@ -1,0 +1,100 @@
+# 图像生成提示词集合
+# 风格：Tech-noir, Cinematic, Futuristic, High Contrast
+# 主色调：深蓝+黑，提亮色：电光蓝、霓虹橙、金色
+
+## 1. 全景总结图 (封面) - eval-panorama-2026.png
+A cinematic, high-tech conceptual art showing the complete AI evaluation ecosystem. The image is divided into three interconnected sections representing the evolution of AI evaluation:
+
+Left section: A complex network of AI agents with glowing neural pathways, showing multiple interconnected nodes with data flowing between them. The agents are represented as abstract geometric forms with electric blue cores.
+
+Center section: Three grading systems arranged in a triangular formation - a rigid crystal structure (code-based), a flowing organic mesh (model-based), and a golden human silhouette (human-based). They are connected by beams of neon orange light representing data flow.
+
+Right section: An evolutionary timeline showing three iterations of a testing system, each more complex and refined than the last, with the final version incorporating elements of chess strategy (representing AI-resistant design).
+
+The entire composition has a dramatic blue and orange contrast lighting, with deep black shadows. The style is futuristic, tech-noir, highly detailed. In the background, faint holographic grid lines and data streams create depth. The title "AI EVALUATION 2026" appears in glowing text at the top. 16:9 aspect ratio, 4k resolution, cinematic composition.
+
+## 2. Agent 评估的复杂性 - agent-complexity.png
+A cinematic visualization of AI agent complexity showing a multi-turn evaluation scenario. The image shows:
+
+A central AI agent represented as a glowing, multi-faceted geometric core with electric blue light. Around it, multiple concentric rings represent evaluation turns:
+
+- Inner ring: Tool calls shown as beam of light extending from the agent to various tool icons (file reader, code editor, terminal, web browser)
+- Middle ring: State changes represented by morphing geometric shapes
+- Outer ring: Error propagation shown as cracks or distortions that compound across turns
+
+The background is deep black with subtle circuit board patterns. Dramatic lighting creates strong contrast between the glowing agent and the dark environment. Electric blue and neon orange accent colors highlight the data flows. The composition emphasizes complexity and interconnectedness. Style: tech-noir, futuristic, highly detailed. 16:9 aspect ratio.
+
+## 3. 三种评分器对比 - grader-comparison.png
+An isometric 3D infographic comparing three grading systems in a cinematic tech-noir style:
+
+Three columns arranged horizontally, each representing a different grader type:
+
+Left column (Code-based): A rigid, crystalline structure made of geometric shapes. Sharp edges, precise angles, glowing electric blue. Shows binary pass/fail indicators as green/red lights. Floating above: "CODE-BASED" in holographic text.
+
+Center column (Model-based): A flowing, organic mesh network with interconnected nodes. Soft curves, pulsing with data. Shows confidence scores as gradient bars from blue to orange. Floating above: "MODEL-BASED" in holographic text.
+
+Right column (Human-based): A golden human silhouette made of light particles, with a subtle halo effect. Shows quality judgments as star ratings. Floating above: "HUMAN-BASED" in holographic text.
+
+At the bottom, a comparison table shows strengths and weaknesses as holographic data plates. Deep black background with subtle grid. Cinematic lighting with blue and orange accent colors. Style: minimalist infographic meets tech-noir. 16:9 aspect ratio.
+
+## 4. 非确定性指标 - non-deterministic-metrics.png
+A cinematic visualization showing the mathematical divergence of pass@k and pass^k metrics:
+
+The image shows two contrasting curves plotted on a futuristic holographic graph:
+
+- Top curve (pass@k): Starts at 75%, curves upward exponentially toward 100% as k increases, colored in electric blue
+- Bottom curve (pass^k): Starts at 75%, curves downward exponentially toward 0% as k increases, colored in neon orange
+
+The graph grid is a glowing holographic projection in deep space. Floating data points show specific values (k=1, k=10, k=100). The background shows a stylized probability distribution as a flowing particle field.
+
+At the bottom, two icons represent the use cases:
+- Left: An explorer with multiple paths (representing "opportunities to succeed")
+- Right: A fortress requiring consistent defense (representing "every time must work")
+
+Deep black background, dramatic lighting, high contrast. Style: data visualization meets tech-noir. 16:9 aspect ratio.
+
+## 5. 8 步评估路线图 - eval-roadmap.png
+A cinematic infographic showing the 8-step evaluation roadmap as an ascending path:
+
+The image shows a stylized mountain ascent path with 8 platforms, each representing a step:
+
+Step 0 (base): "START EARLY" - A small glowing platform with "20-50 tasks" icon
+Step 1: "MANUAL TESTS" - Platform with tools and checklist icons
+Step 2: "UNAMBIGUOUS TASKS" - Platform with crystal-clear task descriptions
+Step 3: "BALANCED SETS" - Platform with balanced scale icon (positive/negative)
+Step 4: "STABLE ENV" - Platform with isolated container cubes
+Step 5: "GRADER DESIGN" - Platform with three grading system icons
+Step 6: "READ LOGS" - Platform with transcript/document icons
+Step 7: "MONITOR SATURATION" - Platform with progress bar at 100%
+Step 8 (peak): "LONG-TERM HEALTH" - A glowing summit with maintenance gear icons
+
+The path glows with electric blue light, ascending from bottom-left to top-right. Each platform is connected by a beam of light. The background shows a stylized mountain landscape rendered in wireframe. Deep black shadows, dramatic blue and orange contrast. Style: infographic meets epic landscape. 16:9 aspect ratio.
+
+## 6. AI 抗性评估进化史 - ai-resistant-evolution.png
+A cinematic timeline showing the three-year evolution of AI-resistant evaluation:
+
+Three horizontal panels arranged left-to-right, representing different time periods:
+
+Panel 1 (2023 - "The Beginning"): Shows a human engineer working at a computer with a simulated accelerator. The accelerator is represented as a complex geometric processor with glowing blue circuits. The human is larger, confident. Background: warm orange lighting.
+
+Panel 2 (2025 - "Claude Opus 4 Strikes"): Shows Claude (represented as an AI core) completing the task alongside the human. The human looks surprised. The AI solution is shown as a more optimized version of the processor. Background: mixed blue and orange lighting, representing the transition.
+
+Panel 3 (Late 2025 - "Claude Opus 4.5 Dominates"): Shows Claude as a larger, more advanced entity, while the human has adapted by designing more abstract, puzzle-like challenges (Zachtronics-style). The new challenges are shown as intricate, constrained instruction sets. Background: cool blue lighting with orange highlights.
+
+Each panel is separated by a glowing vertical beam. At the bottom, a timeline shows the progression of model capabilities as an ascending curve. A comparison table shows cycle counts from 2164 (Claude Opus 4) to <1363 (human expert). Deep black background, cinematic lighting. Style: narrative visualization meets tech-noir. 16:9 aspect ratio.
+
+## 7. 瑞士奶酪模型 - swiss-cheese-model.png
+A cinematic visualization of the Swiss Cheese Model for evaluation methods:
+
+The image shows multiple layers of translucent "slices" arranged horizontally, each representing a different evaluation method:
+
+Layer 1 (front): "AUTOMATED EVALS" - A geometric slice with small holes (gaps), colored electric blue
+Layer 2: "PRODUCTION MONITORING" - A slice with different hole positions, colored deep blue
+Layer 3: "A/B TESTING" - A slice with yet different holes, colored cyan
+Layer 4: "USER FEEDBACK" - A slice with larger but fewer holes, colored teal
+Layer 5: "MANUAL REVIEW" - A slice with minimal holes, colored sky blue
+Layer 6 (back): "SYSTEMATIC STUDIES" - A nearly solid slice with very few holes, colored gold
+
+Through the aligned holes, a bright orange beam of light passes through all layers, representing a "caught issue." Misaligned holes show dark spots where issues slip through.
+
+The slices have a glass-like, semi-transparent quality. The background is deep black. The composition emphasizes depth and layering. Floating labels explain each layer's role. Dramatic lighting with strong contrast between the light beam and dark holes. Style: 3D visualization meets tech-noir. 16:9 aspect ratio.

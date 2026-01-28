@@ -1,0 +1,27 @@
+# OpenSpec 文章配图提示词
+
+## 图片 1: 工作流演进图 (openspec-workflow-evolution.png)
+用途: 文章顶部，展示范式转移
+比例: 16:9
+
+Prompt:
+A cinematic, high-tech conceptual evolution diagram showing the transformation from old rigid workflow to new flexible action-based system. Left side: A linear flowchart with arrows showing proposal → apply → archive in muted grays. Right side: A dynamic network of interconnected nodes glowing in electric blue and neon orange, with icons representing different actions like explore, new, continue, ff, apply, verify, sync, archive. A central transformation wave flows from left to right. Style: futuristic tech-noir, high contrast, isometric 3D elements. Dramatic blue and orange lighting. 16:9 aspect ratio, ultra detailed.
+
+---
+
+## 图片 2: 全景总结图 (openspec-panorama.png)
+用途: 文章末尾，展示核心变革全景
+比例: 16:9
+
+Prompt:
+A panoramic summary infographic showing OpenSpec v1.0 core innovations. Center: A stylized "1.0" milestone marker. Surrounding elements arranged in a network: (1) Action-based workflow icons arranged in a circle, (2) 21 AI tool logos floating in a cloud, (3) Three-layer architecture diagram showing Context + Rules + Templates, (4) Semantic sync markers (ADDED, MODIFIED) flowing between documents. Color scheme: Deep blue background, electric blue highlights, neon orange accents. Style: cinematic tech-noir, futuristic, high contrast, isometric 3D, data visualization aesthetic. 16:9 aspect ratio, ultra detailed, 4K quality.
+
+---
+
+## 生成命令示例
+
+# 使用 GLM (快速、经济)
+python3 /Users/bytedance/.claude/skills/image-gen/scripts/generate_image.py --prompt_file /Users/bytedance/github-learn-project/Paper-Notes/blog/images/prompts.txt --aspect_ratio 16:9
+
+# 使用 Gemini (高质量)
+python3 /Users/bytedance/.claude/skills/image-gen/scripts/generate_image.py --prompt_file /Users/bytedance/github-learn-project/Paper-Notes/blog/images/prompts.txt --model gemini --image_size 4K --aspect_ratio 16:9
